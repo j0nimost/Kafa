@@ -4,10 +4,10 @@ A fast easy to use csv,tsv file parser. It has a low memory footprint with alot 
 🚧 UNDER ACTIVE DEVELOPMENT 🚧
 ### How To Use
 There are two options;
-- RowEnumerable
-- IEnumerable<T>
+- `RowEnumerable`
+- `IEnumerable<T>`
 
-#### RowEnumerable 
+#### `RowEnumerable`
 For fast performance with minimal reflection over head the RowEnumerable allows you to iterate over the CSV rows yourself.
 Example:
 ```c#
@@ -55,7 +55,7 @@ Example:
             // or
        var result2 = rows[new Index(0)].Cols[new Index(0)].ToString();
 ```
-#### IEnumerable<T>
+#### `IEnumerable<T>`
 Understanding that many users want a simple easy to use experience the library allows
 you to parse directly into a type.
 
