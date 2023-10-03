@@ -13,7 +13,7 @@ Example:
 ```c#
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
-            using var rows = Kafa.Read(stream, ReadEverythingOption);
+            using var rows = Kafa.Read(stream);
             int rowCount =0, colCount = 0;
             foreach (var row in rows)
             {
@@ -32,7 +32,7 @@ Example:
 ```c#
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
-            using var rows = Kafa.Read(stream, ReadEverythingOption);
+            using var rows = Kafa.Read(stream);
             int sum =0;
             foreach (var row in rows)
             {
