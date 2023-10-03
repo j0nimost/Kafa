@@ -56,7 +56,7 @@ Example:
             var result2 = rows[new Index(0)].Cols[new Index(0)].ToString();
 ```
 #### IEnumerable<T>
-Understanding that many users want a simple easy to use experience like `System.Text.Json`, the library allows
+Understanding that many users want a simple easy to use experience the library allows
 you to parse directly into a type.
 
 Example:
