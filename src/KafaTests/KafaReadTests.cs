@@ -59,6 +59,26 @@ namespace KafaTests
             Assert.Equal(28, colCount);
         }
 
+        [Theory]
+        [MemberData(nameof(GetObjects))]
+        public void ReadColString(string sampleCSV)
+        {
+            using var rows = Kafa.Read(sampleCSV, ReadEverythingOption);
+            Assert.NotEmpty(rows);
+            int rowCount = 0, colCount = 0;
+            foreach (var row in rows)
+            {
+                foreach (var col in row.GetCols())
+                {
+                    Debug.WriteLine(col.ToString());
+                    colCount++;
+                }
+                rowCount++;
+            }
+            Assert.Equal(4, rowCount);
+            Assert.Equal(28, colCount);
+        }
+
 
 
         [Theory]

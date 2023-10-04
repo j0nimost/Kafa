@@ -21,9 +21,6 @@ namespace nyingi.Kafa.Reader
 
         public int LastBufferIndex { get; private set; }
 
-        private int bufferReadCount;
-        
-
         private const int MaxBufferSize = 512;
 
         public readonly KafaOptions Options;
@@ -37,12 +34,12 @@ namespace nyingi.Kafa.Reader
             BufferLength = bufferLength;
             Buffer = ArrayPool<char>.Shared.Rent(Math.Max(BufferLength, MaxBufferSize));
             ColMarker = ArrayPool<int>.Shared.Rent(Math.Max(BufferLength / 2, MaxBufferSize));
-            bufferReadCount = 0;
             Options = kafaOptions;
         }
 
         public async ValueTask ReadStateAsync(TextReader reader, CancellationToken cancellationToken)
         {
+            int bufferReadCount = 0;
             do
             {
                 int bufferRead = await reader.ReadAsync(Buffer, cancellationToken);
@@ -54,7 +51,12 @@ namespace nyingi.Kafa.Reader
 
         public void ReadState(TextReader reader)
         {
-            bufferReadCount = reader.Read(Buffer, 0, Buffer.Length);
+            _ = reader.Read(Buffer, 0, Buffer.Length);
+        }
+
+        public void ReadState(ReadOnlySpan<char> content)
+        {
+            content.CopyTo(Buffer);
         }
 
         public void ProcessBuffer()
