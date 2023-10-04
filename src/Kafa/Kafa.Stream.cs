@@ -11,10 +11,10 @@ namespace nyingi.Kafa
         public static RowEnumerable Read(Stream ioStream, KafaOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(ioStream, nameof(ioStream));
-            var kafaOptions = KafaOptions.ResolveKafaOptions(options);
-            using TextReader tr = new StreamReader(ioStream, kafaOptions.Encoding!);
+            options = KafaOptions.ResolveKafaOptions(options);
+            using TextReader tr = new StreamReader(ioStream, options.Encoding!);
 
-            var readerState = new KafaReadState((int)ioStream.Length, kafaOptions);
+            var readerState = new KafaReadState((int)ioStream.Length, options);
 
             readerState.ReadState(tr);
             readerState.ProcessBuffer();
@@ -34,10 +34,10 @@ namespace nyingi.Kafa
         public static RowEnumerable Read(Stream ioStream, Range rowRange, KafaOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(ioStream, nameof(ioStream));
-            var kafaOptions = KafaOptions.ResolveKafaOptions(options);
-            using TextReader tr = new StreamReader(ioStream, kafaOptions.Encoding!);
+            options= KafaOptions.ResolveKafaOptions(options);
+            using TextReader tr = new StreamReader(ioStream, options.Encoding!);
 
-            var readerState = new KafaReadState((int)ioStream.Length, kafaOptions);
+            var readerState = new KafaReadState((int)ioStream.Length, options);
 
             readerState.ReadState(tr);
 
@@ -48,10 +48,10 @@ namespace nyingi.Kafa
         public static async ValueTask<RowEnumerable> ReadAsync(Stream ioStream, KafaOptions? options = null, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(ioStream, nameof(ioStream));
-            var kafaOptions = KafaOptions.ResolveKafaOptions(options);
-            using TextReader tr = new StreamReader(ioStream, kafaOptions.Encoding!);
+            options = KafaOptions.ResolveKafaOptions(options);
+            using TextReader tr = new StreamReader(ioStream, options.Encoding!);
 
-            var readerState = new KafaReadState((int)ioStream.Length, kafaOptions);
+            var readerState = new KafaReadState((int)ioStream.Length, options);
 
             return await ReadProcessorAsync(readerState, tr, cancellationToken);
         }

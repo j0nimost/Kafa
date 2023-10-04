@@ -7,14 +7,12 @@ namespace nyingi.Kafa.Reflection
     internal class KafaReflection
     {
         public Dictionary<int, PropertyInfo> properties= default;
-        public string ClassName { get; private set; }
 
         public readonly KafaTypeInfo TypeInfo;
         public KafaReflection(KafaTypeInfo typeInfo, Dictionary<string, int>? Headers = default) 
         {
             // match propertyName with header
             TypeInfo = typeInfo;
-            ClassName = TypeInfo.Type.Name;
             // store all the properties
             properties = new Dictionary<int, PropertyInfo>(TypeInfo.Type.GetProperties().Length);
             int count = 0;
