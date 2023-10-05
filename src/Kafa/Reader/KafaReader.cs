@@ -42,7 +42,6 @@ namespace nyingi.Kafa.Reader
             int startColIndex = Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_kafaReadState.ColMarker), index);
             int lastColIndex = Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_kafaReadState.ColMarker), lastColMarkerIndex);
             startColIndex = startColIndex == 0 ? startColIndex : startColIndex + 1; // escape \n token
-            lastColIndex = lastColMarkerIndex == ColMarkerLength - 1 ? lastColIndex + 1 : lastColIndex - 1; // read last char and escape \r token
             return _kafaReadState.Buffer.AsMemory(startColIndex, lastColIndex - startColIndex); 
         }
 

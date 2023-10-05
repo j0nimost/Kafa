@@ -1,4 +1,5 @@
 using nyingi.Kafa.Reader;
+using System.IO;
 
 namespace KafaTests
 {
@@ -17,7 +18,27 @@ namespace KafaTests
             new object[] { "date,open,high,low,close,volume,Name\r\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"" }
         };
 
+        public static IEnumerable<object[]> GetDifferentRows() => new List<object[]>
+        {
+            new object[]{ "date,open,high,low,close,volume,Name\r\n" },
+            new object[]{ "date,open,high,low,close,volume,Name\n" },
+            new object[]{ "date,open,high,low,close,volume,Name" }
+        };
+
         private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, FileType = FileType.CSV };
+
+        [Theory]
+        [MemberData(nameof(GetDifferentRows))]
+        public void ReadRow(string rowString)
+        {
+            string expected = "date,open,high,low,close,volume,Name";
+            using var rows = Kafa.Read(rowString, ReadEverythingOption);
+            foreach (var row in rows)
+            {
+                // test whether row can skip CRLF and LF
+                Assert.Equal(expected, row.ToString());
+            }
+        }
 
         [Theory]
         [MemberData(nameof(GetObjects))]
