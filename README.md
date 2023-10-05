@@ -66,7 +66,7 @@ Example:
        var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
        var result = await Kafa.ReadAsync<CsvData>(stream);
 ```
-To make it easier to parse a file Kafa offers an Attribute Type that can match a string or the column index.
+To make it easier to parse a file Kafa offers an Attribute Type that can match a column name or the column index.
 
 Example: 
 ```c#
