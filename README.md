@@ -62,8 +62,29 @@ you to parse directly into a type.
 Example:
 ```c#
        var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-
        var result = await Kafa.ReadAsync<CsvData>(stream);
+```
+To make it easier to parse a file Kafa offers an Attribute Type that can match a string or the column index.
+
+Example: 
+```c#
+       class CSVDataWithAttributes
+       {
+           [Kafa("date")]
+           public DateTime Date { get; set; }
+           [Kafa(1)]
+           public double Open { get; set; }
+           [Kafa(2)]
+           public double High { get; set; }
+           [Kafa(3)]
+           public double Low { get; set; }
+           [Kafa(4)]
+           public double Close { get; set; }
+           [Kafa(5)]
+           public int Volume { get; set; }
+           [Kafa("name")]
+           public string Name { get; set; }
+       }
 ```
 ### Support
 Only .Net Core 7 and >

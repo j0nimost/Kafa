@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.Specialized;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -28,7 +29,7 @@ namespace nyingi.Kafa.Reader
         public readonly int BufferLength;
 
 
-        public Dictionary<string,int>? Headers { get; private set; } = default;
+        public OrderedDictionary Headers { get; private set; } = default;
         public KafaReadState(int bufferLength, KafaOptions kafaOptions)
         {
             BufferLength = bufferLength;
@@ -197,7 +198,7 @@ namespace nyingi.Kafa.Reader
         }
         private void ReadHeaderRow(int length)
         {
-            Headers = new Dictionary<string, int>(length);
+            Headers = new OrderedDictionary(length);
             int index = 0;
             int colStartIndex = 0, colEndIndex = 0;
             while (index + 1 <= length)

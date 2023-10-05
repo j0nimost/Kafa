@@ -1,5 +1,6 @@
 ﻿
 using System.Collections;
+using System.Collections.Specialized;
 
 namespace nyingi.Kafa.Reader
 {
@@ -56,7 +57,7 @@ namespace nyingi.Kafa.Reader
 
             public int Length => _reader.RowCount;
 
-            public Dictionary<string, int>? Headers => _reader.Headers;
+            public OrderedDictionary? Headers => _reader.Headers;
             private int GetIndexOffset(Index index)
             {
                 return GetIndexOffset(index.Value);

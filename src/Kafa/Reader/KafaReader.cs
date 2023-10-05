@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Specialized;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -27,11 +28,10 @@ namespace nyingi.Kafa.Reader
 
         public int OffSet => _kafaReadState.OffSet;
 
-        public Dictionary<string, int>? Headers => _kafaReadState.Headers;
+        public OrderedDictionary? Headers => _kafaReadState.Headers;
 
         public ReadOnlyMemory<char> ReadRowSpan(int index, out int lastColMarkerIndex)
         {
-            // TODO: Clean up Rows 
             lastColMarkerIndex = index + _kafaReadState.ColCount;
 
             if(index < 0 || lastColMarkerIndex > ColMarkerLength - 1)

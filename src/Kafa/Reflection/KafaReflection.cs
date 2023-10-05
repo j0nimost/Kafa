@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Specialized;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using static nyingi.Kafa.Reader.KafaReader;
 
@@ -9,7 +10,7 @@ namespace nyingi.Kafa.Reflection
         public Dictionary<int, PropertyInfo> properties= default;
 
         public readonly KafaTypeInfo TypeInfo;
-        public KafaReflection(KafaTypeInfo typeInfo, Dictionary<string, int>? Headers = default) 
+        public KafaReflection(KafaTypeInfo typeInfo, OrderedDictionary Headers = default) 
         {
             // match propertyName with header
             TypeInfo = typeInfo;
@@ -18,13 +19,28 @@ namespace nyingi.Kafa.Reflection
             int count = 0;
             foreach (var property in TypeInfo.Type.GetProperties())
             {
-                string name = property.Name.ToLower();
-                if (Headers != null && Headers.ContainsKey(name))
+                if(Headers != null)
                 {
-                    properties.Add(Headers[name], property); 
+                    var kafa = property.GetCustomAttribute<KafaAttribute>(false);
 
+                    if (kafa != null)
+                    {
+                        if(!string.IsNullOrEmpty(kafa.FieldName))
+                        {
+                            properties.Add((int)Headers[kafa.FieldName], property);
+
+                        }
+                        else
+                        {
+                            properties.Add((int)Headers[kafa.FieldIndex], property);
+                        }
+                    }
+                    else if (Headers.Contains(property.Name))
+                    {
+                        properties.Add((int)Headers[property.Name], property);
+                    }
                 }
-                else if (Headers == null)
+                else
                 {
                     properties.Add(count, property); 
                     count++;
