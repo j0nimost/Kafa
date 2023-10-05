@@ -18,7 +18,7 @@ namespace nyingi.Kafa.Reader
 
         public int OffSet { get; private set; }
 
-        public bool HasCLRF { get; private set; } = false;
+        public bool HasCRLF { get; private set; } = false;
 
         public int LastBufferIndex { get; private set; }
 
@@ -185,7 +185,7 @@ namespace nyingi.Kafa.Reader
 
                     if (Buffer[i - 1] == '\r')
                     {
-                        HasCLRF = true;
+                        HasCRLF = true;
                     }
                     break;
                 }
@@ -204,7 +204,7 @@ namespace nyingi.Kafa.Reader
             while (index + 1 <= length)
             {
                 colStartIndex = this.ColMarker[index] == 0 ? 0 : this.ColMarker[index] + 1;
-                colEndIndex = HasCLRF && index + 1 == length ? this.ColMarker[index + 1] - 1  : this.ColMarker[index + 1];
+                colEndIndex = HasCRLF && index + 1 == length ? this.ColMarker[index + 1] - 1  : this.ColMarker[index + 1];
 
                 Headers.Add(Buffer.AsSpan(colStartIndex, colEndIndex - colStartIndex).ToString(), index);
 

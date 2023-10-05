@@ -24,7 +24,7 @@ namespace nyingi.Kafa.Reader
 
         public int LastBufferIndex => _kafaReadState.LastBufferIndex;
 
-        public bool HasCRLF => _kafaReadState.HasCLRF;
+        public bool HasCRLF => _kafaReadState.HasCRLF;
 
         public int OffSet => _kafaReadState.OffSet;
 
@@ -42,6 +42,10 @@ namespace nyingi.Kafa.Reader
             int startColIndex = Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_kafaReadState.ColMarker), index);
             int lastColIndex = Unsafe.Add(ref MemoryMarshal.GetArrayDataReference(_kafaReadState.ColMarker), lastColMarkerIndex);
             startColIndex = startColIndex == 0 ? startColIndex : startColIndex + 1; // escape \n token
+            // if in last row pass the lastColIndex
+            // else check if HASCRLF then skip \r else return current
+            lastColIndex = lastColMarkerIndex == ColMarkerLength - 1 ? lastColIndex :
+                                                            (_kafaReadState.HasCRLF ? lastColIndex - 1 : lastColIndex);
             return _kafaReadState.Buffer.AsMemory(startColIndex, lastColIndex - startColIndex); 
         }
 

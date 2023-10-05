@@ -20,9 +20,9 @@ namespace KafaTests
 
         public static IEnumerable<object[]> GetDifferentRows() => new List<object[]>
         {
-            new object[]{ "date,open,high,low,close,volume,Name\r\n" },
-            new object[]{ "date,open,high,low,close,volume,Name\n" },
-            new object[]{ "date,open,high,low,close,volume,Name" }
+            new object[]{ "date,open,high,low,close,volume,Name\r\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"" },
+            new object[]{ "date,open,high,low,close,volume,Name\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"" },
+            //new object[]{ "date,open,high,low,close,volume,Name" }
         };
 
         private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, FileType = FileType.CSV };
@@ -31,13 +31,11 @@ namespace KafaTests
         [MemberData(nameof(GetDifferentRows))]
         public void ReadRow(string rowString)
         {
-            string expected = "date,open,high,low,close,volume,Name";
+            string expectedHeader = "date,open,high,low,close,volume,Name";
+            string expectedRow = "2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"";
             using var rows = Kafa.Read(rowString, ReadEverythingOption);
-            foreach (var row in rows)
-            {
-                // test whether row can skip CRLF and LF
-                Assert.Equal(expected, row.ToString());
-            }
+            Assert.Equal(expectedHeader, rows[0].ToString());
+            Assert.Equal(expectedRow, rows[1].ToString());
         }
 
         [Theory]
