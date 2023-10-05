@@ -77,7 +77,7 @@
         }
 
         [Fact]
-        public async Task ReadToTypeWithAttributes()
+        public void  ReadToTypeWithAttributes()
         {
             string csv = "date,open,High,Low,Close,Total,name\r\n2013-02-08,15.07,15.12,14.63,14.75,8407500,AAL\r\n2013-02-11,14.89,15.01,14.26,14.46,8882000,AAL\r\n2013-02-12,14.45,14.51,14.1,14.27,8126000,AAL\r\n";
 
