@@ -1,6 +1,8 @@
 # Kafa
 A fast easy to use csv,tsv file parser. It has a low memory footprint with alot of optimizations to be done.
 
+![Build Status](https://github.com/j0nimost/Kafa/actions/workflows/dotnet.yml/badge.svg)
+
 🚧 UNDER ACTIVE DEVELOPMENT 🚧
 ### How To Use
 There are two options;
