@@ -21,8 +21,7 @@ namespace KafaTests
         public static IEnumerable<object[]> GetDifferentRows() => new List<object[]>
         {
             new object[]{ "date,open,high,low,close,volume,Name\r\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"" },
-            new object[]{ "date,open,high,low,close,volume,Name\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"" },
-            //new object[]{ "date,open,high,low,close,volume,Name" }
+            new object[]{ "date,open,high,low,close,volume,Name\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"\n2013-02-12,14.45,14.51,14.1,14.27,8126000,AAL" },
         };
 
         private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, FileType = FileType.CSV };
