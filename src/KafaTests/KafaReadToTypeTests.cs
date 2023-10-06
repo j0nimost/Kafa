@@ -13,19 +13,19 @@
 
     class CSVDataWithAttributes
     {
-        [Kafa("date")]
+        [KafaColumn("date")]
         public DateTime Date { get; set; }
-        [Kafa(1)]
+        [KafaColumn(1)]
         public double Open { get; set; }
-        [Kafa(2)]
+        [KafaColumn(2)]
         public double High { get; set; }
-        [Kafa(3)]
+        [KafaColumn(3)]
         public double Low { get; set; }
-        [Kafa(4)]
+        [KafaColumn(4)]
         public double Close { get; set; }
-        [Kafa(5)]
+        [KafaColumn(5)]
         public int Volume { get; set; }
-        [Kafa("name")]
+        [KafaColumn("name")]
         public string Name { get; set; }
     }
     public class KafaReadToTypeTests

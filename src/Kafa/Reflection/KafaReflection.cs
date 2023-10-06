@@ -21,7 +21,7 @@ namespace nyingi.Kafa.Reflection
             {
                 if(Headers != null)
                 {
-                    var kafa = property.GetCustomAttribute<KafaAttribute>(false);
+                    var kafa = property.GetCustomAttribute<KafaColumnAttribute>(false);
 
                     if (kafa != null)
                     {
