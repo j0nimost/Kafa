@@ -20,7 +20,7 @@ namespace nyingi.Kafa
             ArgumentNullException.ThrowIfNullOrEmpty(content, nameof(content));
             var rows = Read(content.AsSpan(), options);
             var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo, rows.Headers);
+            var reflection = new KafaReflection(typeInfo);
             return reflection.SetProperties<T>(rows);
         }
 

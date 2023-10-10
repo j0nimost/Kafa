@@ -4,8 +4,8 @@ namespace nyingi.Kafa
 {
     internal class KafaTypeInfo
     {
-        public Type Type { get; }
-        public KafaOptions KafaOptions { get; }
+        public readonly Type Type;
+        public readonly KafaOptions KafaOptions;
         public bool HasAttributes { get; private set;}
         public KafaTypeInfo(Type type, KafaOptions kafaOptions)
         {

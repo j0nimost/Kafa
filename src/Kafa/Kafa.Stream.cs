@@ -1,5 +1,8 @@
 ﻿using nyingi.Kafa.Reader;
 using nyingi.Kafa.Reflection;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
 using System.Threading;
 using System.Xml;
 using static nyingi.Kafa.Reader.KafaReader;
@@ -27,7 +30,7 @@ namespace nyingi.Kafa
         {
             var rowEnumerable = Read(ioStream, options);
             var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo, rowEnumerable.Headers);
+            var reflection = new KafaReflection(typeInfo);
             return reflection.SetProperties<T>(rowEnumerable);
         }
 
@@ -60,7 +63,7 @@ namespace nyingi.Kafa
         {
             var rows = await ReadAsync(ioStream, options, cancellationToken);
             var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo, rows.Headers);
+            var reflection = new KafaReflection(typeInfo);
             return reflection.SetProperties<T>(rows);
         }
 
@@ -72,6 +75,43 @@ namespace nyingi.Kafa
             var reader = new KafaReader(kafaReadState);
 
             return reader.GetRows();
+        }
+
+        public static async ValueTask<TextWriter> WriteAsync<T>(List<T> entities, KafaOptions options =null)
+        {
+            ArgumentNullException.ThrowIfNull(entities, nameof(entities));
+            var reflection = SetupOptions<T>(options);
+            using var strWriter = new StringWriter(new StringBuilder());
+            return await reflection.GetProperties<T>(entities, strWriter);
+        }
+
+        public static async ValueTask<MemoryStream> WriteToStreamAsync<T>(List<T> entities, KafaOptions options = null)
+        {
+            ArgumentNullException.ThrowIfNull(entities, nameof(entities));
+            var reflection = SetupOptions<T>(options);
+            var memoryStream = new MemoryStream();
+            using var strWriter = new StreamWriter(memoryStream, leaveOpen: true);
+            var textStream = await reflection.GetProperties<T>(entities, strWriter);
+            textStream.Flush();
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            return memoryStream;
+        }
+
+        public static async ValueTask WriteToFileAsync<T>(List<T> entities, string path, KafaOptions options = null)
+        {
+            ArgumentNullException.ThrowIfNull(entities, nameof(entities));
+            var reflection = SetupOptions<T>(options);
+            using var fs = new FileStream(path, FileMode.Create);
+            using var strWriter = new StreamWriter(fs, options.Encoding!, 512);
+            await reflection.GetProperties<T>(entities, strWriter);
+        }
+
+        private static KafaReflection SetupOptions<T>(KafaOptions options)
+        {
+            options = KafaOptions.ResolveKafaOptions(options);
+            var typeInfo = new KafaTypeInfo(typeof(T), options);
+            return new KafaReflection(typeInfo);
         }
     }
 }

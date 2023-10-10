@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup> 
+    <Folder Include="Writer\" /> 
     <Folder Include="Reader\" />
   </ItemGroup>
 </Project>

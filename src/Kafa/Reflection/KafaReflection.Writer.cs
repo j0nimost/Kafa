@@ -1,48 +1,52 @@
 ﻿using System.Collections.Specialized;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Reflection.PortableExecutable;
 using static nyingi.Kafa.Reader.KafaReader;
 
 namespace nyingi.Kafa.Reflection
 {
-    internal class KafaReflection
+    internal partial class KafaReflection
     {
-        public Dictionary<int, PropertyInfo> properties= default;
+        private Dictionary<int, PropertyInfo> properties= default;
 
         public readonly KafaTypeInfo TypeInfo;
-        public KafaReflection(KafaTypeInfo typeInfo, OrderedDictionary Headers = default) 
+        public KafaReflection(KafaTypeInfo typeInfo) 
         {
             // match propertyName with header
             TypeInfo = typeInfo;
-            // store all the properties
-            properties = new Dictionary<int, PropertyInfo>(TypeInfo.Type.GetProperties().Length);
+        }
+
+        private void ReadHeader(OrderedDictionary headers = null)
+        {
+            properties = new Dictionary<int, PropertyInfo>(TypeInfo.Type.GetProperties().Length); // ahead
+
             int count = 0;
             foreach (var property in TypeInfo.Type.GetProperties())
             {
-                if(Headers != null)
+                if (headers != null)
                 {
                     var kafa = property.GetCustomAttribute<KafaColumnAttribute>(false);
 
                     if (kafa != null)
                     {
-                        if(!string.IsNullOrEmpty(kafa.FieldName))
+                        if (!string.IsNullOrEmpty(kafa.FieldName))
                         {
-                            properties.Add((int)Headers[kafa.FieldName], property);
+                            properties.Add((int)headers[kafa.FieldName], property);
 
                         }
                         else
                         {
-                            properties.Add((int)Headers[kafa.FieldIndex], property);
+                            properties.Add((int)headers[kafa.FieldIndex], property);
                         }
                     }
-                    else if (Headers.Contains(property.Name))
+                    else if (headers.Contains(property.Name))
                     {
-                        properties.Add((int)Headers[property.Name], property);
+                        properties.Add((int)headers[property.Name], property);
                     }
                 }
                 else
                 {
-                    properties.Add(count, property); 
+                    properties.Add(count, property);
                     count++;
                 }
             }
@@ -50,6 +54,9 @@ namespace nyingi.Kafa.Reflection
 
         public IEnumerable<T> SetProperties<T>(RowEnumerable rows)
         {
+            // process header first
+            ReadHeader(rows.Headers);
+
             if(properties.Count == 0)
             {
                 throw new Exception("{0} class is empty");
@@ -81,8 +88,11 @@ namespace nyingi.Kafa.Reflection
             return (List<T>)instance;
         }
 
+
+
         private object? TypeResolver(Type type, Col col)
         {
+
             if (type == typeof(string))
             {
                 return col.Value.ToString();
