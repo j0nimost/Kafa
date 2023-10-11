@@ -145,7 +145,7 @@
 
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                expected = "Date,Open,High,Low,Close,Volume,Name\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:09:45,12.45,13,12.1,12.99,1233435512,AMZN\n";
+                expected = "Date,Open,High,Low,Close,Volume,Name\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n";
             }
             else
             {
