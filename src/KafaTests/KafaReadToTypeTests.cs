@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace KafaTests
+﻿namespace KafaTests
 {
     class CsvData
     {
@@ -119,7 +117,16 @@ namespace KafaTests
             };
 
             var rowmem = await Kafa.WriteAsync<CsvData>(csvs, new KafaOptions() { HasHeader=false, FileType= FileType.CSV});
-            var expected = "10/10/2023 4:09:45 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:09:45 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            string expected = "";
+
+            if(Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                expected = "10/10/2023 16:09:45,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:09:45,12.45,13,12.1,12.99,1233435512,AMZN\n";
+            }
+            else
+            {
+                expected = "10/10/2023 4:09:45 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:09:45 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            }
             var str = rowmem.ToString();
             Assert.NotNull(str);
             Assert.NotEmpty(str);
@@ -134,7 +141,16 @@ namespace KafaTests
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
-            string expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            string expected = "";
+
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\n10/10/2023 16:09:45,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:09:45,12.45,13,12.1,12.99,1233435512,AMZN\n";
+            }
+            else
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            }
             var rowmem = await Kafa.WriteAsync<CsvData>(csvs);
             var str = rowmem.ToString();
             Assert.NotNull(str);
@@ -150,7 +166,16 @@ namespace KafaTests
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
-            string expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            string expected = "";
+
+            if(Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n";
+            }
+            else
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            }
             using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
             Assert.NotNull(stream);
              
