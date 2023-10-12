@@ -101,6 +101,7 @@ namespace nyingi.Kafa
         public static async ValueTask WriteToFileAsync<T>(List<T> entities, string path, KafaOptions options = null)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
+            ArgumentNullException.ThrowIfNull(path, nameof(path));
             var reflection = SetupOptions<T>(options);
             using var fs = new FileStream(path, FileMode.Create);
             using var strWriter = new StreamWriter(fs, options.Encoding!, 512);

@@ -1,6 +1,8 @@
 # Kafa
 A fast easy to use csv,tsv file parser. It has a low memory footprint with alot of optimizations to be done.
 
+Kafa is also RFC-4180 Compliant [docs](https://www.rfc-editor.org/rfc/rfc4180)
+
 ![Build Status](https://github.com/j0nimost/Kafa/actions/workflows/dotnet.yml/badge.svg)
 
 🚧 UNDER ACTIVE DEVELOPMENT 🚧
@@ -97,7 +99,8 @@ You can simply convert a list of objects to a textwriter, stream or a file
                 new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
 
-            var rowmem = await Kafa.WriteAsync<CsvData>(csvs);
+            var textWriter = await Kafa.WriteAsync<CsvData>(csvs);
+            string result = textWriter.ToString();
             // or 
             using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
             // or
