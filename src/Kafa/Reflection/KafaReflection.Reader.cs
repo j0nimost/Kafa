@@ -24,7 +24,18 @@ namespace nyingi.Kafa.Reflection
                     int countHeader = 0;
                     foreach (var propertyInfo in propertyInfos)
                     {
-                        await textWriter.WriteAsync(propertyInfo.Name);
+
+                        var kafa = propertyInfo.GetCustomAttribute<KafaColumnAttribute>(false);
+
+                        if (kafa != null && !string.IsNullOrEmpty(kafa.FieldName))
+                        {
+                            await textWriter.WriteAsync(kafa.FieldName);
+
+                        }
+                        else
+                        {
+                            await textWriter.WriteAsync(propertyInfo.Name);
+                        }
 
                         if (countHeader < propertyInfos.Length - 1)
                         {
