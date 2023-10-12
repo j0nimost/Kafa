@@ -76,7 +76,7 @@ namespace nyingi.Kafa
 
             return reader.GetRows();
         }
-
+        
         public static async ValueTask<TextWriter> WriteAsync<T>(List<T> entities, KafaOptions options =null)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));

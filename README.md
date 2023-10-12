@@ -4,7 +4,7 @@ A fast easy to use csv,tsv file parser. It has a low memory footprint with alot 
 ![Build Status](https://github.com/j0nimost/Kafa/actions/workflows/dotnet.yml/badge.svg)
 
 🚧 UNDER ACTIVE DEVELOPMENT 🚧
-### How To Use
+### How To Read
 There are two options;
 - `RowEnumerable`
 - `IEnumerable<T>`
@@ -88,6 +88,23 @@ Example:
            public string Name { get; set; }
        }
 ```
+### How To Write
+You can simply convert a list of objects to a textwriter, stream or a file
+```c#
+            var csvs = new List<CSVDataWithAttributes>()
+            {
+                new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
+                new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
+            };
+
+            var rowmem = await Kafa.WriteAsync<CsvData>(csvs);
+            // or 
+            using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
+            // or
+            await Kafa.WriteToFileAsync<CsvData>(csvs,@"C:\Users\ADMIN\Documents");
+
+```
+Both writing and reading support Attributes
 ### Support
 Only .Net Core 7 and >
 ### Author
