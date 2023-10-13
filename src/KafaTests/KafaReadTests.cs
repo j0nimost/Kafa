@@ -66,7 +66,7 @@ namespace KafaTests
             int rowCount =0, colCount = 0;
             foreach (var row in rows)
             {
-                foreach (var col in row.GetCols())
+                foreach (var col in row.Cols)
                 {
                     Debug.WriteLine(col.ToString());
                     colCount++;
@@ -86,7 +86,7 @@ namespace KafaTests
             int rowCount = 0, colCount = 0;
             foreach (var row in rows)
             {
-                foreach (var col in row.GetCols())
+                foreach (var col in row.Cols)
                 {
                     Debug.WriteLine(col.ToString());
                     colCount++;
@@ -147,10 +147,10 @@ namespace KafaTests
 
             using var rows = Kafa.Read(stream);
             Assert.NotEmpty(rows);
-            Assert.NotEmpty(rows[0].GetCols()[0].ToString());
-            Assert.Equal("date", rows[0].GetCols()[0].ToString());
-            Assert.Equal("2013-02-08", rows[1].GetCols()[0].ToString());
-            Assert.Equal("15.12", rows[1].GetCols()[2].ToString());
+            Assert.NotEmpty(rows[0].Cols[0].ToString());
+            Assert.Equal("date", rows[0].Cols[0].ToString());
+            Assert.Equal("2013-02-08", rows[1].Cols[0].ToString());
+            Assert.Equal("15.12", rows[1].Cols[2].ToString());
             Assert.Equal("AAL", rows[3].Cols[6].ToString());
             Assert.Equal("AAL", rows[2].Cols[6].ToString());
 
@@ -189,7 +189,7 @@ namespace KafaTests
             using var rows = Kafa.Read(stream);
             Assert.NotEmpty(rows);
             Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
-            Assert.Throws<KafaException>(() => rows[0].GetCols()[-1].ToString());
+            Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
         }
 
         [Fact]

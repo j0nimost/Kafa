@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 
 namespace nyingi.Kafa.Reader
 {
@@ -17,10 +18,11 @@ namespace nyingi.Kafa.Reader
                 }
             }
 
-            public Col(ColEnumerable colEnumerable, ReadOnlySpan<char> value)
+            public Col(ColEnumerable colEnumerable, int index)
             {
-                Value = value;
                 _colEnumerable = colEnumerable;
+                Value = _colEnumerable.ReadColSpan(index);
+
             }
 
 
@@ -43,19 +45,20 @@ namespace nyingi.Kafa.Reader
             private readonly KafaReader _reader;
             private ReadOnlySpan<int> _colMarkerIndexes;
 
-            public ColEnumerable(KafaReader reader, ReadOnlySpan<int> colMarkerIndexes)
+            public ColEnumerable(KafaReader reader, int startColIndex, int length)
             {
                 _reader = reader;
-                _colMarkerIndexes = colMarkerIndexes;
+                _colMarkerIndexes = reader.ReadColMarkerSpan(startColIndex, length);
             }
 
             public int Length => _colMarkerIndexes.Length;
 
-            public Col this[int index] => new(this, this.ReadColSpan(index)); 
+            public Col this[int index] => new(this, index); 
 
-            public Col this[Index index] => new(this, this.ReadColSpan(index.GetOffset(this.Length)));
+            public Col this[Index index] => new(this, index.GetOffset(this.Length));
 
-            private ReadOnlySpan<char> ReadColSpan(int index)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public ReadOnlySpan<char> ReadColSpan(int index)
             {
                 int lastColMarker = index + 1;
 
@@ -66,7 +69,7 @@ namespace nyingi.Kafa.Reader
                 int startIndex = _colMarkerIndexes[index]; 
                 startIndex = startIndex == 0 ? 0 : startIndex + 1; // SKIP Separator
                 int lastIndex = _colMarkerIndexes[lastColMarker];
-                lastIndex = _reader.HasCRLF && lastColMarker == _colMarkerIndexes.Length - 1 && lastIndex != _reader.LastBufferIndex 
+                lastIndex = _reader.HasCRLF && lastColMarker == _colMarkerIndexes.Length - 1 && lastIndex != _reader.LastBufferIndex // figure out use case
                                 ? lastIndex - 1 : lastIndex;
                 return _reader.ReadColSpan(startIndex, lastIndex);
             } 
@@ -96,7 +99,7 @@ namespace nyingi.Kafa.Reader
                     _colEnumerable = colEnumerable;
                 }
 
-                public Col Current => new(_colEnumerable, _colEnumerable.ReadColSpan(_index));
+                public Col Current => new(_colEnumerable, _index);
 
                 public bool MoveNext()
                 {

@@ -52,6 +52,7 @@ namespace nyingi.Kafa.Reflection
             }
         }
 
+        
         public IEnumerable<T> SetProperties<T>(RowEnumerable rows)
         {
             // process header first
@@ -85,7 +86,7 @@ namespace nyingi.Kafa.Reflection
 
             }
 
-            return (List<T>)instance;
+            return instance;
         }
 
 

@@ -6,6 +6,7 @@ namespace nyingi.Kafa.Reader
 {
     public partial struct KafaReader
     {
+
         public readonly struct Row
         {
             public readonly ReadOnlyMemory<char> Value; 
@@ -22,17 +23,11 @@ namespace nyingi.Kafa.Reader
                 ColMarkerLength = _lastColMarkerIndex - _startColMarkerIndex + 1;
             }
 
-            public readonly ColEnumerable Cols => GetCols();
-
-            public readonly ColEnumerable GetCols()
-            {
-                return new(_reader, _reader.ReadColMarkerSpan(_startColMarkerIndex, ColMarkerLength));
-             }
-
-            public readonly ColEnumerable GetCols(Range range)
+            public readonly ColEnumerable Cols => new(_reader, _startColMarkerIndex, ColMarkerLength);
+            public readonly ColEnumerable GetColsRange(Range range)
             {
                 var(offset, length) = range.GetOffsetAndLength(ColMarkerLength);
-                return new(_reader, _reader.ReadColMarkerSpan(offset, length));
+                return new(_reader, offset, length);
             }
 
             public override string ToString()
@@ -92,7 +87,9 @@ namespace nyingi.Kafa.Reader
                     _reader = reader;
                     _columnCount = _reader.ColumnCount;
                     _colMarkerLastIndex = _reader.ColMarkerLength - 1;
-                    _index = _reader.OffSet == 0 ? _index : 0;
+                    // if the Offset exists since we might have read the headers, move the index for easier arithmetics
+                    _index = _reader.OffSet == 0 ? _index : 0; 
+
                 }
 
 

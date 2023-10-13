@@ -52,7 +52,7 @@ namespace nyingi.Kafa.Reader
 
         public void ReadState(TextReader reader)
         {
-            _ = reader.Read(Buffer, 0, Buffer.Length);
+            _ = reader.Read(Buffer, 0, BufferLength);
         }
 
         public void ReadState(ReadOnlySpan<char> content)

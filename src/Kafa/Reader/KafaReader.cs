@@ -30,9 +30,10 @@ namespace nyingi.Kafa.Reader
 
         public OrderedDictionary? Headers => _kafaReadState.Headers;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ReadOnlyMemory<char> ReadRowSpan(int index, out int lastColMarkerIndex)
         {
-            lastColMarkerIndex = index + _kafaReadState.ColCount;
+            lastColMarkerIndex = index + ColumnCount;
 
             if(index < 0 || lastColMarkerIndex > ColMarkerLength - 1)
             {
@@ -49,6 +50,7 @@ namespace nyingi.Kafa.Reader
             return _kafaReadState.Buffer.AsMemory(startColIndex, lastColIndex - startColIndex); 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ReadOnlySpan<char> ReadColSpan(int startIndex, int lastIndex)
         {
             return _kafaReadState.Buffer.AsSpan(startIndex, lastIndex - startIndex);

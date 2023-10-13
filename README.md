@@ -21,7 +21,7 @@ Example:
        int rowCount =0, colCount = 0;
        foreach (var row in rows)
        {
-           foreach (var col in row.GetCols())
+           foreach (var col in row.Cols)
            {
                Debug.WriteLine(col.ToString());
                colCount++;
@@ -55,7 +55,7 @@ Example:
 
        using var rows = Kafa.Read(stream);
 
-       var result = rows[0].GetCols()[0].ToString();
+       var result = rows[0].Cols[0].ToString();
             // or
        var result2 = rows[new Index(0)].Cols[new Index(0)].ToString();
 ```
