@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace nyingi.Kafa
 {
-    public enum FileType
+    public class SeparatorFileType
     {
-        CSV = (byte)',',
-        TSV = (byte)';'
+        public const char CSV = ',';
+        public const char TSV = ';';
     }
     public sealed partial class KafaOptions
     {
         public CultureInfo? CultureInfo { get; set; }
         public Encoding? Encoding { get; set; }
-        public FileType FileType { get; set; }
+        public char Separator { get; set; } = '\0';
 
         public bool HasHeader { get; set; } = true;
 
@@ -24,7 +24,7 @@ namespace nyingi.Kafa
         {
             get
             {
-                return new KafaOptions { FileType = FileType.CSV, CultureInfo = CultureInfo.InvariantCulture, Encoding = Encoding.UTF8 };
+                return new KafaOptions { Separator = SeparatorFileType.CSV, CultureInfo = CultureInfo.InvariantCulture, Encoding = Encoding.UTF8 };
             }
         }
 

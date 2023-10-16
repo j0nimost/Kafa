@@ -24,7 +24,7 @@ namespace KafaTests
             new object[]{ "date,open,high,low,close,volume,Name\n2013-02-08,15.07,15.12,14.63,14.75,8407500,\"AAL\"\n2013-02-12,14.45,14.51,14.1,14.27,8126000,AAL" },
         };
 
-        private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, FileType = FileType.CSV };
+        private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, Separator = SeparatorFileType.CSV};
 
         [Theory]
         [MemberData(nameof(GetDifferentRows))]
@@ -213,7 +213,7 @@ namespace KafaTests
             {
                 CultureInfo = System.Globalization.CultureInfo.CurrentCulture,
                 HasHeader = true,
-                FileType = FileType.CSV
+                Separator = SeparatorFileType.CSV
             };
 
             using var kafaReaderState = new KafaReadState((int)ioStream.Length, kafaOptions);
@@ -239,7 +239,7 @@ namespace KafaTests
             {
                 CultureInfo = System.Globalization.CultureInfo.CurrentCulture,
                 HasHeader = false,
-                FileType = FileType.CSV
+                Separator = SeparatorFileType.CSV
 
             };
 

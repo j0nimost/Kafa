@@ -12,7 +12,7 @@
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:09:45 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
 
-            var rowmem = await Kafa.WriteAsync<CsvData>(csvs, new KafaOptions() { HasHeader = false, FileType = FileType.CSV });
+            var rowmem = await Kafa.WriteAsync<CsvData>(csvs, new KafaOptions() { HasHeader = false, Separator=SeparatorFileType.CSV});
             string expected = "";
 
             if (Environment.OSVersion.Platform == PlatformID.Unix)

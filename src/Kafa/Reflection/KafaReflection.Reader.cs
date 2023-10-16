@@ -39,7 +39,7 @@ namespace nyingi.Kafa.Reflection
 
                         if (countHeader < propertyInfos.Length - 1)
                         {
-                            await textWriter.WriteAsync((char)TypeInfo.KafaOptions.FileType);
+                            await textWriter.WriteAsync((char)TypeInfo.KafaOptions.Separator);
 
                         }
                         countHeader++;
@@ -56,7 +56,7 @@ namespace nyingi.Kafa.Reflection
 
                     if (count < propertyCount - 1)
                     {
-                        await textWriter.WriteAsync((char)TypeInfo.KafaOptions.FileType);
+                        await textWriter.WriteAsync((char)TypeInfo.KafaOptions.Separator);
                     }
                     count++;
                 }

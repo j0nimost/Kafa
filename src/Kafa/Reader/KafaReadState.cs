@@ -119,7 +119,7 @@ namespace nyingi.Kafa.Reader
                     i = j + 1;
                     continue;
                 }
-                else if (Buffer[i] == (int)Options.FileType || Buffer[i] == '\n' ||  Buffer[i + 1] == '\0')
+                else if (Buffer[i] == (int)Options.Separator || Buffer[i] == '\n' ||  Buffer[i + 1] == '\0')
                 {
                     ColMarker[colIndexer] = i;
                     colIndexer++;
@@ -175,7 +175,7 @@ namespace nyingi.Kafa.Reader
                     i = j + 1;
                     continue;
                 }
-                else if (Buffer[i] == (int)Options.FileType)
+                else if (Buffer[i] == (int)Options.Separator)
                 {
                     ColCount++;
                 }

@@ -5,7 +5,7 @@
     /// </summary>
     public class RFC4180Tests
     {
-        private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, FileType = FileType.CSV };
+        private KafaOptions ReadEverythingOption => new KafaOptions() { HasHeader = false, Separator= SeparatorFileType.CSV};
 
         [Fact]
         public void ReadRowsWithCRLF()

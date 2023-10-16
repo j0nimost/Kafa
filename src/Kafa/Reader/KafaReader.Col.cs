@@ -69,7 +69,8 @@ namespace nyingi.Kafa.Reader
                 int startIndex = _colMarkerIndexes[index]; 
                 startIndex = startIndex == 0 ? 0 : startIndex + 1; // SKIP Separator
                 int lastIndex = _colMarkerIndexes[lastColMarker];
-                lastIndex = _reader.HasCRLF && lastColMarker == _colMarkerIndexes.Length - 1 && lastIndex != _reader.LastBufferIndex // figure out use case
+                // TODO: Simplify this checks
+                lastIndex = _reader.HasCRLF && lastColMarker == _colMarkerIndexes.Length - 1 && lastIndex != _reader.LastBufferIndex 
                                 ? lastIndex - 1 : lastIndex;
                 return _reader.ReadColSpan(startIndex, lastIndex);
             } 
