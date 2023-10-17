@@ -81,7 +81,7 @@ namespace nyingi.Kafa
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
             var reflection = SetupOptions<T>(options);
-            using var strWriter = new StringWriter(new StringBuilder());
+            using var strWriter = new StringWriter(new StringBuilder(4096)); // 4Kb
             return await reflection.GetProperties<T>(entities, strWriter);
         }
 
