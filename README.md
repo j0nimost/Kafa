@@ -51,13 +51,15 @@ To also make it easier you can jump to a specific Row and Col
 
 Example:
 ```c#
-       var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
-       using var rows = Kafa.Read(stream);
+        using var rows = Kafa.Read(stream);
 
-       var result = rows[0].Cols[0].ToString();
+        var result = rows[0].Cols[0].ToString();
             // or
-       var result2 = rows[new Index(0)].Cols[new Index(0)].ToString();
+        var result2 = rows[new Index(0)].Cols[new Index(0)].ToString();
+            // or
+        var result3 = row[0].Cols["date"].ToString(); // read Column by Name
 ```
 #### `IEnumerable<T>`
 Understanding that many users want a simple easy to use experience the library allows

@@ -25,6 +25,12 @@ namespace nyingi.Kafa.Reader
 
             }
 
+            public Col(ColEnumerable colEnumerable, string columnName)
+            {
+                _colEnumerable = colEnumerable;
+                int index = _colEnumerable.ReadColByHeader(columnName);
+                Value = _colEnumerable.ReadColSpan(index);
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public T Parse<T>() where T : ISpanParsable<T> => _colEnumerable.Parse<T>(Value);
@@ -56,6 +62,19 @@ namespace nyingi.Kafa.Reader
             public Col this[int index] => new(this, index); 
 
             public Col this[Index index] => new(this, index.GetOffset(this.Length));
+
+            public Col this[string columnName] => new(this, columnName);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public int ReadColByHeader(string columnName)
+            {
+                if(_reader.Headers != null && _reader.Headers.Contains(columnName))
+                {
+                    return (int)_reader.Headers[columnName]!;
+                }
+
+                throw new KafaException($"{columnName} Not Found");
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public ReadOnlySpan<char> ReadColSpan(int index)

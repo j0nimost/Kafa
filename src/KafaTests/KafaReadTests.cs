@@ -171,6 +171,21 @@ namespace KafaTests
             Assert.Equal("AAL", rows[new Index(2)].Cols[new Index(6)].ToString());
         }
 
+
+        [Theory]
+        [MemberData(nameof(GetObjects))]
+        public void ReadColByColumnName(string sampleCSV)
+        {
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
+
+            using var rows = Kafa.Read(stream);
+            Assert.NotEmpty(rows);
+            Assert.Equal("2013-02-08", rows[1].Cols["date"].ToString());
+            Assert.Equal("15.12", rows[1].Cols["high"].ToString());
+            Assert.Equal("AAL", rows[3].Cols["Name"].ToString());
+            Assert.Equal("AAL", rows[2].Cols["Name"].ToString());
+        }
+
         [Theory]
         [MemberData(nameof(GetObjects))]
         public void ReadRowOutOfRange(string sampleCSV)
@@ -190,6 +205,17 @@ namespace KafaTests
             Assert.NotEmpty(rows);
             Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
             Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
+        }
+
+
+        [Theory]
+        [MemberData(nameof(GetObjects))]
+        public void ReadColNameNotFound(string sampleCSV)
+        {
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
+            using var rows = Kafa.Read(stream);
+            Assert.NotEmpty(rows);
+            Assert.Throws<KafaException>(() => rows[0].Cols["city"].ToString());
         }
 
         [Fact]
