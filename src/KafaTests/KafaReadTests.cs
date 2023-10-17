@@ -1,4 +1,4 @@
-using nyingi.Kafa.Reader;
+﻿using nyingi.Kafa.Reader;
 using System.IO;
 
 namespace KafaTests
@@ -264,6 +264,20 @@ namespace KafaTests
             using var rows = Kafa.Read(ioStream);
             Assert.NotEmpty(rows);
             Assert.Equal("\"AAL\"", rows[1].Cols[6].ToString());
+
+        }
+
+
+        [Fact]
+        public void ReadUnicode()
+        {
+            string unicodeCsv = "2013-02-08,15.07 €,15.12 ¥,14.63 ¥,14.75 ¥,8407500,\"AAL✅\"";
+            using var rows = Kafa.Read(unicodeCsv, ReadEverythingOption);
+            Assert.NotEmpty(rows);
+            Assert.Equal("15.07 €", rows[0].Cols[1].ToString());
+            Assert.Equal("14.75 ¥", rows[0].Cols[4].ToString());
+            Assert.Equal("\"AAL✅\"", rows[0].Cols[6].ToString());
+
 
         }
     }
