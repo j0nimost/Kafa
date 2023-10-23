@@ -102,7 +102,7 @@ namespace nyingi.Kafa.Reader
 
             public bool TryParse<T>(ReadOnlySpan<char> colValue, out T result) where T : ISpanParsable<T>
             {
-                return T.TryParse(colValue, _reader.cultureInfo, out result!);
+                return T.TryParse(colValue, _reader.cultureInfo, out result);
             }
 
             public Enumerator GetEnumerator() => new Enumerator(this);

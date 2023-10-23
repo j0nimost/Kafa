@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup> 
-    <Folder Include="Writer\" /> 
     <Folder Include="Reader\" />
   </ItemGroup>
 </Project>
