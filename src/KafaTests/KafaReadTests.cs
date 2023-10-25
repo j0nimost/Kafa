@@ -44,7 +44,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream, ReadEverythingOption);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             int count = 0;
             foreach (var row in rows)
             {
@@ -62,7 +62,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream, ReadEverythingOption);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             int rowCount =0, colCount = 0;
             foreach (var row in rows)
             {
@@ -82,7 +82,7 @@ namespace KafaTests
         public void ReadColString(string sampleCSV)
         {
             using var rows = Kafa.Read(sampleCSV, ReadEverythingOption);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             int rowCount = 0, colCount = 0;
             foreach (var row in rows)
             {
@@ -105,7 +105,7 @@ namespace KafaTests
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace KafaTests
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
             using var rows = await Kafa.ReadAsync(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
         }
 
         [Theory]
@@ -124,7 +124,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.NotEmpty(rows[0].ToString());
         }
 
@@ -135,7 +135,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.NotEmpty(rows[new Index(0)].ToString());
         }
 
@@ -146,7 +146,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.NotEmpty(rows[0].Cols[0].ToString());
             Assert.Equal("date", rows[0].Cols[0].ToString());
             Assert.Equal("2013-02-08", rows[1].Cols[0].ToString());
@@ -163,7 +163,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Equal("date", rows[new Index(0)].Cols[new Index(0)].ToString());
             Assert.Equal("2013-02-08", rows[new Index(1)].Cols[new Index(0)].ToString());
             Assert.Equal("15.12", rows[new Index(1)].Cols[new Index(2)].ToString());
@@ -179,7 +179,7 @@ namespace KafaTests
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
 
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Equal("2013-02-08", rows[1].Cols["date"].ToString());
             Assert.Equal("15.12", rows[1].Cols["high"].ToString());
             Assert.Equal("AAL", rows[3].Cols["Name"].ToString());
@@ -192,7 +192,7 @@ namespace KafaTests
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Throws<KafaException>(() => rows[-1].ToString());
         }
 
@@ -202,7 +202,7 @@ namespace KafaTests
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
             Assert.Throws<KafaException>(() => rows[0].Cols[-1].ToString());
         }
@@ -214,7 +214,7 @@ namespace KafaTests
         {
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
             using var rows = Kafa.Read(stream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Throws<KafaException>(() => rows[0].Cols["city"].ToString());
         }
 
@@ -288,7 +288,7 @@ namespace KafaTests
         {
             using var ioStream = new MemoryStream(Encoding.UTF8.GetBytes(specialStyle));
             using var rows = Kafa.Read(ioStream);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Equal("\"AAL\"", rows[1].Cols[6].ToString());
 
         }
@@ -299,7 +299,7 @@ namespace KafaTests
         {
             string unicodeCsv = "2013-02-08,15.07 €,15.12 ¥,14.63 ¥,14.75 ¥,8407500,\"AAL✅\"";
             using var rows = Kafa.Read(unicodeCsv, ReadEverythingOption);
-            Assert.NotEmpty(rows);
+            Assert.NotEqual(0, rows.Length);
             Assert.Equal("15.07 €", rows[0].Cols[1].ToString());
             Assert.Equal("14.75 ¥", rows[0].Cols[4].ToString());
             Assert.Equal("\"AAL✅\"", rows[0].Cols[6].ToString());

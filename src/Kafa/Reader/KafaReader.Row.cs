@@ -9,35 +9,34 @@ namespace nyingi.Kafa.Reader
 
         public readonly struct Row
         {
-            public readonly ReadOnlyMemory<char> Value; 
-            public readonly KafaReader _reader;
+            private readonly ReadOnlyMemory<char> _value; 
+            private readonly KafaReader _reader;
             private readonly int _startColMarkerIndex;
-            private readonly int _lastColMarkerIndex;
-            public readonly int ColMarkerLength;
+            private readonly int _colMarkerLength;
 
             public Row(in KafaReader reader, int startIndex)
             {
                 _reader = reader;
                 _startColMarkerIndex = startIndex;
-                Value = reader.ReadRowSpan(_startColMarkerIndex, out _lastColMarkerIndex);
-                ColMarkerLength = _lastColMarkerIndex - _startColMarkerIndex + 1;
+                _value = reader.ReadRowSpan(_startColMarkerIndex, out int lastColMarkerIndex);
+                _colMarkerLength = lastColMarkerIndex - _startColMarkerIndex + 1;
             }
 
-            public readonly ColEnumerable Cols => new(_reader, _startColMarkerIndex, ColMarkerLength);
+            public readonly ColEnumerable Cols => new(_reader, _startColMarkerIndex, _colMarkerLength);
             public readonly ColEnumerable GetColsRange(Range range)
             {
-                var(offset, length) = range.GetOffsetAndLength(ColMarkerLength);
+                var(offset, length) = range.GetOffsetAndLength(_colMarkerLength);
                 return new(_reader, offset, length);
             }
 
             public override string ToString()
             {
-                return $"{Value}";
+                return $"{_value}";
             }
 
         }
 
-        public struct RowEnumerable : IEnumerable<Row>, IDisposable
+        public readonly struct RowEnumerable :  IDisposable
         {
             private readonly KafaReader _reader;
 
@@ -62,16 +61,13 @@ namespace nyingi.Kafa.Reader
             {
                 return index * _reader.ColumnCount;
             }
-
-            IEnumerator<Row> IEnumerable<Row>.GetEnumerator() => new Enumerator(_reader);
-
-            IEnumerator IEnumerable.GetEnumerator() => new Enumerator(_reader);
+            public Enumerator GetEnumerator() => new Enumerator(_reader);
 
             public void Dispose()
             {
                 _reader.Dispose();
             }
-            public struct Enumerator : IEnumerator<Row>
+            public struct Enumerator 
             {
                 private int _index = -1;
                 private readonly int _columnCount;
@@ -79,9 +75,6 @@ namespace nyingi.Kafa.Reader
                 private readonly KafaReader _reader;
 
                 public Row Current => new(_reader, _index);
-
-                object IEnumerator.Current => Current;
-
                 public Enumerator(in KafaReader reader)
                 {
                     _reader = reader;
@@ -91,8 +84,6 @@ namespace nyingi.Kafa.Reader
                     _index = _reader.OffSet == 0 ? _index : 0; 
 
                 }
-
-
                 public bool MoveNext()
                 {
                     if(_index > -1)
@@ -106,15 +97,9 @@ namespace nyingi.Kafa.Reader
 
                     return _index < _colMarkerLastIndex;
                 }
-
-
                 public void Reset()
                 {
                     _index = -1;
-                }
-
-                public void Dispose()
-                {
                 }
             }
         }
