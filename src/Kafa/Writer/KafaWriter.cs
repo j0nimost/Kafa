@@ -4,26 +4,28 @@ namespace nyingi.Kafa.Writer
 {
     internal partial class KafaWriter : IDisposable
     {
-        private readonly IBufferWriter<byte> _bufferWriter;
+        private IBufferWriter<byte> _bufferWriter;
+        private KafaPooledWriter _kafaPooledWriter;
         public int BytesWritten { get; private set; }
         private Stream? _stream = default;
-        private Memory<byte> _memory = default;
-
 
         public KafaWriter(IBufferWriter<byte> bufferWriter)
         {
             _bufferWriter = bufferWriter;
         }
 
-        public KafaWriter(Stream stream)
+        public KafaWriter(KafaPooledWriter pooledWriter, Stream stream)
         {
             _stream = stream;
+            _kafaPooledWriter = pooledWriter; // use the backing bufferWriter to flusH
         }
 
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _stream = null;
+            _kafaPooledWriter = null;
+            _bufferWriter = null;
         }
     }
 }

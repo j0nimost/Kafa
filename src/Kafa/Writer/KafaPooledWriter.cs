@@ -4,19 +4,19 @@ namespace nyingi.Kafa.Writer
 {
     internal sealed class KafaPooledWriter : IBufferWriter<byte>, IDisposable
     {
-        private const int MAXBUFFERLENGTH = 65556;
+        private const int DefaultBufferLength = 65556;
         private byte[] _buffer;
 
-        private int _index  = 0;
+        private int _index;
 
         public int WrittenCount => _index;
         public int Capacity => _buffer.Length;
         public int FreeCapacity => _buffer.Length - _index;
-
         public KafaPooledWriter(int length)
         {
-            _buffer = ArrayPool<byte>.Shared.Rent(Math.Max(length, MAXBUFFERLENGTH));
+            _buffer = ArrayPool<byte>.Shared.Rent(Math.Max(length, DefaultBufferLength));
         }
+        public ReadOnlySpan<byte> WrittenAsSpan => _buffer.AsSpan(0, _index);
         public void Advance(int count)
         {
             if(count  < 0)
@@ -25,22 +25,16 @@ namespace nyingi.Kafa.Writer
             }
             _index += count;
         }
-
         public Memory<byte> GetMemory(int sizeHint = 0)
         {
             Resize(sizeHint);
-            return _buffer.AsMemory(sizeHint);
+            return _buffer.AsMemory(_index);
         }
-
         public Span<byte> GetSpan(int sizeHint = 0)
         {
             Resize(sizeHint);
-            return _buffer.AsSpan(sizeHint);
+            return _buffer.AsSpan(_index);
         }
-
-
-        public ReadOnlySpan<byte> WrittenAsSpan() => _buffer.AsSpan(0, _index);
-
         private void Resize(int sizeHint)
         {
             if (sizeHint < 0)
@@ -48,6 +42,10 @@ namespace nyingi.Kafa.Writer
                 throw new ArgumentOutOfRangeException(nameof(sizeHint));
             }
 
+            if (sizeHint == 0)
+            {
+                sizeHint = 1;
+            }
             if(sizeHint > FreeCapacity)
             {
                 int growBy = Math.Max(Capacity, sizeHint);
@@ -56,7 +54,6 @@ namespace nyingi.Kafa.Writer
                 {
                     newCapacity += growBy;
                 }
-
                 var newBuffer = ArrayPool<byte>.Shared.Rent(newCapacity);
                 Array.Copy(_buffer, newBuffer, Capacity);
                 _buffer = null!;
@@ -64,9 +61,6 @@ namespace nyingi.Kafa.Writer
                 ArrayPool<byte>.Shared.Return(newBuffer);
             }
         }
-
-
-
         public void Dispose()
         {
             if(_buffer == null) 
