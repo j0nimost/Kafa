@@ -1,5 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 namespace nyingi.Kafa.Reader
 {
@@ -37,7 +36,7 @@ namespace nyingi.Kafa.Reader
 
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool TryParse<T>(out T result) where T : ISpanParsable<T> => _colEnumerable.TryParse(Value, out result);
+            public bool TryParse<T>(out T? result) where T : ISpanParsable<T> => _colEnumerable.TryParse(Value, out result);
 
             public override string ToString()
             {
@@ -95,12 +94,12 @@ namespace nyingi.Kafa.Reader
             } 
 
 
-            public T Parse<T>(ReadOnlySpan<char> scanSpan) where T : ISpanParsable<T>
+            public readonly T Parse<T>(ReadOnlySpan<char> scanSpan) where T : ISpanParsable<T>
             {
                 return T.Parse(scanSpan, _reader.cultureInfo);
             }
 
-            public bool TryParse<T>(ReadOnlySpan<char> colValue, out T result) where T : ISpanParsable<T>
+            public readonly bool TryParse<T>(ReadOnlySpan<char> colValue, out T? result) where T : ISpanParsable<T>
             {
                 return T.TryParse(colValue, _reader.cultureInfo, out result);
             }
