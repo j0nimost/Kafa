@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Transactions;
 
 namespace nyingi.Kafa.Writer
 {
@@ -9,14 +10,14 @@ namespace nyingi.Kafa.Writer
 
         private int _index;
 
-        public int WrittenCount => _index;
-        public int Capacity => _buffer.Length;
-        public int FreeCapacity => _buffer.Length - _index;
+        private int Capacity => _buffer.Length;
+        private int FreeCapacity => _buffer.Length - _index;
         public KafaPooledWriter(int length)
         {
             _buffer = ArrayPool<byte>.Shared.Rent(Math.Max(length, DefaultBufferLength));
         }
         public ReadOnlySpan<byte> WrittenAsSpan => _buffer.AsSpan(0, _index);
+        public ReadOnlyMemory<byte> WrittenAsMemory => _buffer.AsMemory(0, _index);
         public void Advance(int count)
         {
             if(count  < 0)
