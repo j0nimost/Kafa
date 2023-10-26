@@ -34,11 +34,23 @@ namespace nyingi.Kafa.Writer
 
         public void WriteLine()
         {
-            var newLine = new byte[2]
+            byte[] newLine;
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                (byte)'\r',
-                (byte)'\n'
-            };
+                newLine = new byte[1]
+                {
+                    (byte)'\n'
+                };
+            }
+            else
+            {
+                newLine = new byte[2]
+                {
+                    (byte)'\r',
+                    (byte)'\n'
+                };
+            }
+
             Write(newLine);
             
         }
