@@ -1,5 +1,4 @@
 ﻿using System.Buffers;
-using System.Transactions;
 
 namespace nyingi.Kafa.Writer
 {
@@ -12,7 +11,7 @@ namespace nyingi.Kafa.Writer
 
         private int Capacity => _buffer.Length;
         private int FreeCapacity => _buffer.Length - _index;
-        public KafaPooledWriter(int length)
+        public KafaPooledWriter(int length = 0)
         {
             _buffer = ArrayPool<byte>.Shared.Rent(Math.Max(length, DefaultBufferLength));
         }

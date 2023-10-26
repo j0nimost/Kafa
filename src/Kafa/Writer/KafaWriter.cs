@@ -1,4 +1,6 @@
 ﻿using System.Buffers;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace nyingi.Kafa.Writer
 {
@@ -7,14 +9,44 @@ namespace nyingi.Kafa.Writer
         private IBufferWriter<byte>? _bufferWriter;
         private KafaPooledWriter? _kafaPooledWriter;
         private Stream? _stream = default;
-        public KafaWriter(IBufferWriter<byte> bufferWriter)
+
+        private readonly KafaOptions _options;
+        
+        
+        private byte[] _separator = new byte[1];
+        public KafaWriter(in IBufferWriter<byte> bufferWriter, KafaOptions options)
         {
             _bufferWriter = bufferWriter ?? throw new NullReferenceException(nameof(bufferWriter));
+            _options = options;
+            _separator[0] = (byte)_options.Separator;
         }
-        public KafaWriter(Stream stream)
+        public KafaWriter(in Stream stream, KafaOptions options)
         {
             _stream = stream;
+            _options = options;
             _kafaPooledWriter = new KafaPooledWriter(0); // use the default 65k
+        }
+
+        public void WriteSeparator()
+        {
+            Write(_separator.AsSpan());
+        }
+
+        public void WriteLine()
+        {
+            var newLine = new byte[2]
+            {
+                (byte)'\r',
+                (byte)'\n'
+            };
+            Write(newLine);
+            
+        }
+
+        public void Write(string str)
+        {
+            var strBytes = Encoding.UTF8.GetBytes(str);
+            Write(strBytes.AsSpan());
         }
 
         public void Write(ReadOnlySpan<byte> values)

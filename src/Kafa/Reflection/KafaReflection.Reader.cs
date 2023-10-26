@@ -3,12 +3,13 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
+using nyingi.Kafa.Writer;
 
 namespace nyingi.Kafa.Reflection
 {
     internal partial class KafaReflection
     {
-        public async Task<TextWriter> GetProperties<T>(List<T> entities, TextWriter textWriter)
+        public void GetProperties<T>(in KafaWriter writer, List<T> entities)
         {
 
             bool readHeader = false;
@@ -29,42 +30,40 @@ namespace nyingi.Kafa.Reflection
 
                         if (kafa != null && !string.IsNullOrEmpty(kafa.FieldName))
                         {
-                            await textWriter.WriteAsync(kafa.FieldName);
+                            writer.Write(kafa.FieldName);
 
                         }
                         else
                         {
-                            await textWriter.WriteAsync(propertyInfo.Name);
+                            writer.Write(propertyInfo.Name);
                         }
 
                         if (countHeader < propertyInfos.Length - 1)
                         {
-                            await textWriter.WriteAsync((char)TypeInfo.KafaOptions.Separator);
+                            writer.WriteSeparator();
 
                         }
                         countHeader++;
                     }
 
-                    await textWriter.WriteLineAsync();
+                    writer.WriteLine();
                     readHeader= true;
                 }
 
                 propertyCount = propertyInfos.Length;
                 foreach (var propertyInfo in propertyInfos)
                 {
-                    await textWriter.WriteAsync($"{propertyInfo.GetValue(entity)}");
+                    writer.Write($"{propertyInfo.GetValue(entity)}");
 
                     if (count < propertyCount - 1)
                     {
-                        await textWriter.WriteAsync((char)TypeInfo.KafaOptions.Separator);
+                        writer.WriteSeparator();
                     }
                     count++;
                 }
-                await textWriter.WriteLineAsync();
+                writer.WriteLine();
                 count = 0;
             }
-
-            return textWriter;
         }
     }
 }
