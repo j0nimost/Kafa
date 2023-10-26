@@ -12,7 +12,7 @@ There are two options;
 - `IEnumerable<T>`
 
 #### `RowEnumerable`
-For fast performance with minimal reflection over head the RowEnumerable allows you to iterate over the CSV rows yourself.
+For fast performance with minimal over head the RowEnumerable allows you to iterate over the CSV rows yourself.
 Example:
 ```c#
        var stream = new MemoryStream(Encoding.UTF8.GetBytes(sampleCSV));
