@@ -9,6 +9,8 @@ namespace nyingi.Kafa.Writer
         private IBufferWriter<byte>? _bufferWriter;
         private KafaPooledWriter? _kafaPooledWriter;
         private Stream? _stream = default;
+        private readonly byte[] _unixNewLine =new byte[1] {(byte)'\n'};
+        private readonly byte[] _winNewLine = new byte[2] {(byte)'\r',(byte)'\n'};
 
         private readonly KafaOptions _options;
         
@@ -34,25 +36,9 @@ namespace nyingi.Kafa.Writer
 
         public void WriteLine()
         {
-            byte[] newLine;
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                newLine = new byte[1]
-                {
-                    (byte)'\n'
-                };
-            }
-            else
-            {
-                newLine = new byte[2]
-                {
-                    (byte)'\r',
-                    (byte)'\n'
-                };
-            }
+            var newLine = Environment.OSVersion.Platform == PlatformID.Unix ? _unixNewLine : _winNewLine;
 
             Write(newLine);
-            
         }
 
         public void Write(string str)
