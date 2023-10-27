@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace nyingi.Kafa.Reader
 {
-    public struct KafaReadState : IDisposable
+    public sealed class KafaReadState : IDisposable
     {
         public char[] Buffer { get; private set; }
         public int[] ColMarker { get; private set; }

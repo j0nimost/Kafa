@@ -2,7 +2,7 @@
 
 namespace nyingi.Kafa.Reader
 {
-    public partial struct KafaReader
+    public partial class KafaReader
     {
         public readonly ref struct Col
         {
@@ -20,7 +20,7 @@ namespace nyingi.Kafa.Reader
             public Col(ColEnumerable colEnumerable, int index)
             {
                 _colEnumerable = colEnumerable;
-                Value = _colEnumerable.ReadColSpan(index);
+                Value = _colEnumerable.ReadColAsSpan(index);
 
             }
 
@@ -28,7 +28,7 @@ namespace nyingi.Kafa.Reader
             {
                 _colEnumerable = colEnumerable;
                 int index = _colEnumerable.ReadColByHeader(columnName);
-                Value = _colEnumerable.ReadColSpan(index);
+                Value = _colEnumerable.ReadColAsSpan(index);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -45,15 +45,15 @@ namespace nyingi.Kafa.Reader
 
         }
 
-        public ref struct ColEnumerable
+        public struct ColEnumerable
         {
             private readonly KafaReader _reader;
-            private ReadOnlySpan<int> _colMarkerIndexes;
+            private ReadOnlyMemory<int> _colMarkerIndexes;
 
             public ColEnumerable(KafaReader reader, int startColIndex, int length)
             {
                 _reader = reader;
-                _colMarkerIndexes = reader.ReadColMarkerSpan(startColIndex, length);
+                _colMarkerIndexes = reader.ReadColMarkerAsMemory(startColIndex, length);
             }
 
             public int Length => _colMarkerIndexes.Length;
@@ -76,7 +76,7 @@ namespace nyingi.Kafa.Reader
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public ReadOnlySpan<char> ReadColSpan(int index)
+            public ReadOnlySpan<char> ReadColAsSpan(int index)
             {
                 int lastColMarker = index + 1;
 
@@ -84,13 +84,15 @@ namespace nyingi.Kafa.Reader
                 {
                     throw new KafaException($"{index}: {nameof(index)} out of range", new ArgumentOutOfRangeException(nameof(index)));
                 }
-                int startIndex = _colMarkerIndexes[index]; 
+                int startIndex = _colMarkerIndexes.Span[index]; 
                 startIndex = startIndex == 0 ? 0 : startIndex + 1; // SKIP Separator
-                int lastIndex = _colMarkerIndexes[lastColMarker];
+                int lastIndex = _colMarkerIndexes.Span[lastColMarker];
                 // TODO: Simplify this checks
                 lastIndex = _reader.HasCRLF && lastColMarker == _colMarkerIndexes.Length - 1 && lastIndex != _reader.LastBufferIndex 
                                 ? lastIndex - 1 : lastIndex;
-                return _reader.ReadColSpan(startIndex, lastIndex);
+
+                var mem = _reader.ReadColAsMemory(startIndex, lastIndex);
+                return mem.Span;
             } 
 
 
@@ -107,7 +109,7 @@ namespace nyingi.Kafa.Reader
             public Enumerator GetEnumerator() => new Enumerator(this);
 
 
-            public ref struct Enumerator
+            public struct Enumerator
             {
                 private int _index = -1;
 

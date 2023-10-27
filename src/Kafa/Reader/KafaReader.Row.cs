@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 
 namespace nyingi.Kafa.Reader
 {
-    public partial struct KafaReader
+    public partial class KafaReader
     {
 
         public readonly struct Row

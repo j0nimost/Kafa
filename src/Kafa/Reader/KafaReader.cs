@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 
 namespace nyingi.Kafa.Reader
 {
-    public partial struct KafaReader : IDisposable
+    public partial class KafaReader : IDisposable
     {
         private readonly KafaReadState _kafaReadState;
         private readonly CultureInfo? cultureInfo;
-        public KafaReader(in KafaReadState kafaReadState)
+        public KafaReader(KafaReadState kafaReadState)
         {
             _kafaReadState = kafaReadState;
             cultureInfo = kafaReadState.Options.CultureInfo;
@@ -31,7 +31,7 @@ namespace nyingi.Kafa.Reader
         public OrderedDictionary? Headers => _kafaReadState.Headers;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ReadOnlyMemory<char> ReadRowSpan(int index, out int lastColMarkerIndex)
+        public ReadOnlyMemory<char> ReadRowSpan(int index, out int lastColMarkerIndex)
         {
             lastColMarkerIndex = index + ColumnCount;
 
@@ -51,9 +51,9 @@ namespace nyingi.Kafa.Reader
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ReadOnlySpan<char> ReadColSpan(int startIndex, int lastIndex)
+        public ReadOnlyMemory<char> ReadColAsMemory(int startIndex, int lastIndex)
         {
-            return _kafaReadState.Buffer.AsSpan(startIndex, lastIndex - startIndex);
+            return _kafaReadState.Buffer.AsMemory(startIndex, lastIndex - startIndex);
         }
 
         public RowEnumerable GetRows(Range range)
@@ -67,14 +67,14 @@ namespace nyingi.Kafa.Reader
             return new(this);
         }
 
-        private ReadOnlySpan<int> ReadColMarkerSpan(int index, int length)
+        private ReadOnlyMemory<int> ReadColMarkerAsMemory(int index, int length)
         {
             if(index < 0 || index + length > _kafaReadState.ColMarkerLength)
             {
                 throw new KafaException($"{index}: {nameof(index)} out of range", new ArgumentOutOfRangeException(nameof(index)));
             }
 
-            return _kafaReadState.ColMarker.AsSpan(index, length);
+            return _kafaReadState.ColMarker.AsMemory(index, length);
         }
 
         public void Dispose()

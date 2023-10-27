@@ -2,7 +2,7 @@
 
 namespace nyingi.Kafa.Writer
 {
-    public sealed class KafaPooledWriter : IBufferWriter<byte>, IDisposable
+    public class KafaPooledWriter : IBufferWriter<byte>, IDisposable
     {
         private const int DefaultBufferLength = 65556;
         private byte[] _buffer;
