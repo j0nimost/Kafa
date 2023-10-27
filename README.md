@@ -93,7 +93,16 @@ Example:
        }
 ```
 ### How To Write
-You can simply convert a list of objects to a textwriter, stream or a file
+You can Write to;
+- `IBufferWriter<byte>`
+- `ReadOnlySpan<byte>`
+- `Stream`
+- `File`
+
+
+Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to write to, unless explicitly provided a custom one using 
+`Write<T>(IBufferWriter<byte> bufferWriter, List<T> entities, KafaOptions options = null)` Method.
+
 ```c#
             var csvs = new List<CSVDataWithAttributes>()
             {
@@ -101,11 +110,25 @@ You can simply convert a list of objects to a textwriter, stream or a file
                 new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
 
-            var textWriter = await Kafa.WriteAsync<CsvData>(csvs);
-            string result = textWriter.ToString();
+            // get a ReadOnlySpan<bytes>
+            var spanOfbytes = await Kafa.Write<CsvData>(csvs);
+            string result = Encoding.UTF8.GetString(rowmem);
+
             // or 
+            // write to an Stream
+
             using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
+
+            // or 
+            // Write to a IBufferWriter<byte> for zero allocation writes
+
+            using var pooledWriter = new KafaPooledWriter();
+            Kafa.Write<CsvData>(pooledWriter, csvs);
+            var str = Encoding.UTF8.GetString(pooledWriter.WrittenAsSpan);
+            
             // or
+            // write directly to a file
+
             await Kafa.WriteToFileAsync<CsvData>(csvs,@"C:\Users\ADMIN\Documents");
 
 ```
