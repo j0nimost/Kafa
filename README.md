@@ -112,7 +112,7 @@ Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to w
 
             // get a ReadOnlySpan<bytes>
             var spanOfbytes = await Kafa.Write<CsvData>(csvs);
-            string result = Encoding.UTF8.GetString(rowmem);
+            string result = Encoding.UTF8.GetString(spanOfbytes);
 
             // or 
             // write to an Stream
@@ -125,7 +125,7 @@ Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to w
             using var pooledWriter = new KafaPooledWriter();
             Kafa.Write<CsvData>(pooledWriter, csvs);
             var str = Encoding.UTF8.GetString(pooledWriter.WrittenAsSpan);
-            
+
             // or
             // write directly to a file
 
