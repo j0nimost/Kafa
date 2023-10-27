@@ -1,6 +1,6 @@
 ﻿namespace KafaTests
 {
-    class CsvData
+    public class CsvData
     {
         public DateTime Date { get; set; }
         public double Open { get; set; }

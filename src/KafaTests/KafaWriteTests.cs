@@ -1,4 +1,6 @@
-﻿namespace KafaTests
+﻿using nyingi.Kafa.Writer;
+
+namespace KafaTests
 {
     public class KafaWriteTests
     {
@@ -90,6 +92,31 @@
             };
             using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
             Assert.NotNull(stream);
+        }
+
+        [Fact]
+        public async Task WriteToBufferWriter()
+        {
+            var csvs = new List<CsvData>()
+            {
+                new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
+                new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
+            };
+            string expected = "";
+
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n10/10/2023 16:08:38,12.45,13,12.1,12.99,1233435512,AMZN\n";
+            }
+            else
+            {
+                expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
+            }
+            
+            using var pooledWriter = new KafaPooledWriter();
+            Kafa.Write<CsvData>(pooledWriter, csvs);
+            var str = Encoding.UTF8.GetString(pooledWriter.WrittenAsSpan);
+            Assert.Equal(expected, str);
         }
     }
 }

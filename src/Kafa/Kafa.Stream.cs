@@ -78,6 +78,16 @@ namespace nyingi.Kafa
 
             return reader.GetRows();
         }
+
+        public static void Write<T>(IBufferWriter<byte> bufferWriter, List<T> entities, KafaOptions options = null)
+        {
+            ArgumentNullException.ThrowIfNull(entities, nameof(entities));
+            var reflection = SetupOptions<T>(options);
+            using var writer = new KafaWriter(bufferWriter, reflection.TypeInfo.KafaOptions);
+            reflection.GetProperties<T>(writer, entities);
+        }
+        
+        
         public static ReadOnlySpan<byte> Write<T>(List<T> entities, KafaOptions options = null)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));

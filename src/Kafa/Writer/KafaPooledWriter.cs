@@ -2,7 +2,7 @@
 
 namespace nyingi.Kafa.Writer
 {
-    internal sealed class KafaPooledWriter : IBufferWriter<byte>, IDisposable
+    public sealed class KafaPooledWriter : IBufferWriter<byte>, IDisposable
     {
         private const int DefaultBufferLength = 65556;
         private byte[] _buffer;
@@ -69,5 +69,6 @@ namespace nyingi.Kafa.Writer
             }
             ArrayPool<byte>.Shared.Return(_buffer);
         }
+        
     }
 }

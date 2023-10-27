@@ -4,7 +4,7 @@ using System.Text;
 
 namespace nyingi.Kafa.Writer
 {
-    internal class KafaWriter : IDisposable
+    public class KafaWriter : IDisposable
     {
         private IBufferWriter<byte>? _bufferWriter;
         private KafaPooledWriter? _kafaPooledWriter;
@@ -37,7 +37,6 @@ namespace nyingi.Kafa.Writer
         public void WriteLine()
         {
             var newLine = Environment.OSVersion.Platform == PlatformID.Unix ? _unixNewLine : _winNewLine;
-
             Write(newLine);
         }
 
@@ -73,7 +72,7 @@ namespace nyingi.Kafa.Writer
             if (_stream != null)
             {
                 await _stream.WriteAsync(_kafaPooledWriter!.WrittenAsMemory, cancellationToken);
-                await _stream.FlushAsync();
+                await _stream.FlushAsync(cancellationToken);
             }
         }
         public void Dispose()
