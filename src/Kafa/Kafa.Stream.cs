@@ -58,12 +58,12 @@ namespace nyingi.Kafa
 
             var readerState = new KafaReadState((int)ioStream.Length, options);
 
-            return await ReadProcessorAsync(readerState, tr, cancellationToken);
+            return await ReadProcessorAsync(readerState, tr, cancellationToken).ConfigureAwait(false);
         }
 
         public static async ValueTask<IEnumerable<T>> ReadAsync<T>(Stream ioStream, KafaOptions? options = null, CancellationToken cancellationToken = default)
         {
-            var rows = await ReadAsync(ioStream, options, cancellationToken);
+            var rows = await ReadAsync(ioStream, options, cancellationToken).ConfigureAwait(false);
             var typeInfo = new KafaTypeInfo(typeof(T), options);
             var reflection = new KafaReflection(typeInfo);
             return reflection.SetProperties<T>(rows);
@@ -71,7 +71,7 @@ namespace nyingi.Kafa
 
         private static async ValueTask<RowEnumerable> ReadProcessorAsync(KafaReadState kafaReadState, TextReader tr, CancellationToken cancellationToken=default)
         {
-            await kafaReadState.ReadStateAsync(tr, cancellationToken); // read first
+            await kafaReadState.ReadStateAsync(tr, cancellationToken).ConfigureAwait(false); // read first
             kafaReadState.ProcessBuffer(); // process buffer aka Parse
 
             var reader = new KafaReader(kafaReadState);
