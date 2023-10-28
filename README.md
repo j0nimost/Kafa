@@ -104,10 +104,10 @@ Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to w
 `Write<T>(IBufferWriter<byte> bufferWriter, List<T> entities, KafaOptions options = null)` Method.
 
 ```c#
-            var csvs = new List<CSVDataWithAttributes>()
+            var csvs = new List<CsvData>()
             {
-                new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
-                new CSVDataWithAttributes{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
+                new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
+                new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
             };
 
             // get a ReadOnlySpan<bytes>
@@ -122,9 +122,9 @@ Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to w
             // or 
             // Write to a IBufferWriter<byte> for zero allocation writes
 
-            using var pooledWriter = new KafaPooledWriter();
-            Kafa.Write<CsvData>(pooledWriter, csvs);
-            var str = Encoding.UTF8.GetString(pooledWriter.WrittenAsSpan);
+            var arrayWriter = new ArrayBufferWriter<byte>();
+            Kafa.Write<CsvData>(arrayWriter, csvs);
+            var str = Encoding.UTF8.GetString(arrayWriter.WrittenSpan);
 
             // or
             // write directly to a file

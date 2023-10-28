@@ -1,4 +1,5 @@
-﻿using nyingi.Kafa.Writer;
+﻿using System.Buffers;
+using nyingi.Kafa.Writer;
 
 namespace KafaTests
 {
@@ -112,10 +113,10 @@ namespace KafaTests
             {
                 expected = "Date,Open,High,Low,Close,Volume,Name\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n10/10/2023 4:08:38 PM,12.45,13,12.1,12.99,1233435512,AMZN\r\n";
             }
-            
-            using var pooledWriter = new KafaPooledWriter();
-            Kafa.Write<CsvData>(pooledWriter, csvs);
-            var str = Encoding.UTF8.GetString(pooledWriter.WrittenAsSpan);
+
+            var arrayWriter = new ArrayBufferWriter<byte>();
+            Kafa.Write<CsvData>(arrayWriter, csvs);
+            var str = Encoding.UTF8.GetString(arrayWriter.WrittenSpan);
             Assert.Equal(expected, str);
         }
     }
