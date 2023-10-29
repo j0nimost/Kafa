@@ -8,14 +8,8 @@ namespace nyingi.Kafa.Reader
         {
             public readonly ReadOnlySpan<char> Value;
             private readonly ColEnumerable _colEnumerable;
-            
-            public int Length
-            {
-                get
-                {
-                    return Value.Length;
-                }
-            }
+
+            public int Length => Value.Length;
 
             public Col(ColEnumerable colEnumerable, int index)
             {

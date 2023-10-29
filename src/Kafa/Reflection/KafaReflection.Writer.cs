@@ -8,7 +8,7 @@ namespace nyingi.Kafa.Reflection
 {
     internal partial class KafaReflection
     {
-        private Dictionary<int, PropertyInfo> properties= default;
+        private Dictionary<int, PropertyInfo>? _properties= default;
 
         public readonly KafaTypeInfo TypeInfo;
         private readonly CultureInfo? _cultureInfo;
@@ -19,9 +19,9 @@ namespace nyingi.Kafa.Reflection
             _cultureInfo = TypeInfo.KafaOptions.CultureInfo;
         }
 
-        private void ReadHeader(OrderedDictionary headers = null)
+        private void ReadHeader(OrderedDictionary? headers = null)
         {
-            properties = new Dictionary<int, PropertyInfo>(TypeInfo.Type.GetProperties().Length); // ahead
+            _properties = new Dictionary<int, PropertyInfo>(TypeInfo.Type.GetProperties().Length); // ahead
 
             int count = 0;
             foreach (var property in TypeInfo.Type.GetProperties())
@@ -34,22 +34,22 @@ namespace nyingi.Kafa.Reflection
                     {
                         if (!string.IsNullOrEmpty(kafa.FieldName))
                         {
-                            properties.Add((int)headers[kafa.FieldName], property);
+                            _properties.Add((int)headers[kafa.FieldName], property);
 
                         }
                         else
                         {
-                            properties.Add((int)headers[kafa.FieldIndex], property);
+                            _properties.Add((int)headers[kafa.FieldIndex], property);
                         }
                     }
                     else if (headers.Contains(property.Name))
                     {
-                        properties.Add((int)headers[property.Name], property);
+                        _properties.Add((int)headers[property.Name], property);
                     }
                 }
                 else
                 {
-                    properties.Add(count, property);
+                    _properties.Add(count, property);
                     count++;
                 }
             }
@@ -61,7 +61,7 @@ namespace nyingi.Kafa.Reflection
             // process header first
             ReadHeader(rows.Headers);
 
-            if(properties.Count == 0)
+            if(_properties.Count == 0)
             {
                 throw new Exception("{0} class is empty");
             }
@@ -79,7 +79,7 @@ namespace nyingi.Kafa.Reflection
                 foreach (var col in row.Cols)
                 {
                     // populate the properties
-                    var propertyInfo = properties[colIndex];
+                    var propertyInfo = _properties[colIndex];
                     propertyInfo.SetValue(instanceOft, TypeResolver(propertyInfo.PropertyType, col));
                     colIndex++;
                 }

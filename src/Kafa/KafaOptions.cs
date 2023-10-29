@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace nyingi.Kafa
 {
@@ -12,7 +8,7 @@ namespace nyingi.Kafa
         public const char CSV = ',';
         public const char TSV = ';';
     }
-    public sealed partial class KafaOptions
+    public sealed class KafaOptions
     {
         public CultureInfo? CultureInfo { get; set; }
         public Encoding? Encoding { get; set; }

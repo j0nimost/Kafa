@@ -54,10 +54,10 @@ namespace nyingi.Kafa.Writer
                 {
                     newCapacity += growBy;
                 }
-                var newBuffer = ArrayPool<byte>.Shared.Rent(newCapacity);
-                Array.Copy(_buffer, newBuffer, Capacity);
-                _buffer = null!;
-                _buffer = newBuffer;
+
+                var newBuffer = _buffer;
+                _buffer = ArrayPool<byte>.Shared.Rent(newCapacity);
+                Array.Copy(newBuffer, _buffer, Capacity);
                 ArrayPool<byte>.Shared.Return(newBuffer);
             }
         }

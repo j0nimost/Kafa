@@ -1,5 +1,4 @@
-﻿using System;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Collections.Specialized;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -18,7 +17,7 @@ namespace nyingi.Kafa.Reader
 
         public int OffSet { get; private set; }
 
-        public bool HasCRLF { get; private set; } = false;
+        public bool HasCRLF { get; private set; }
 
         public int LastBufferIndex { get; private set; }
 
@@ -29,7 +28,7 @@ namespace nyingi.Kafa.Reader
         public readonly int BufferLength;
 
 
-        public OrderedDictionary Headers { get; private set; } = default;
+        public OrderedDictionary? Headers { get; private set; } = default;
         public KafaReadState(int bufferLength, KafaOptions kafaOptions)
         {
             BufferLength = bufferLength;
@@ -119,7 +118,7 @@ namespace nyingi.Kafa.Reader
                     i = j + 1;
                     continue;
                 }
-                else if (Buffer[i] == (int)Options.Separator || Buffer[i] == '\n' ||  Buffer[i + 1] == '\0')
+                else if (Buffer[i] == Options.Separator || Buffer[i] == '\n' ||  Buffer[i + 1] == '\0')
                 {
                     ColMarker[colIndexer] = i;
                     colIndexer++;
@@ -175,7 +174,7 @@ namespace nyingi.Kafa.Reader
                     i = j + 1;
                     continue;
                 }
-                else if (Buffer[i] == (int)Options.Separator)
+                else if (Buffer[i] == Options.Separator)
                 {
                     ColCount++;
                 }

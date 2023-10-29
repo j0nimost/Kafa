@@ -1,9 +1,4 @@
-﻿
-using System.Diagnostics.CodeAnalysis;
-
-#nullable disable warnings
-
-namespace nyingi.Kafa
+﻿namespace nyingi.Kafa
 {
     [System.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple =false)]
     public class KafaColumnAttribute : Attribute

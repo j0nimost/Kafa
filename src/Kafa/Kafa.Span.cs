@@ -1,7 +1,4 @@
 ﻿using nyingi.Kafa.Reader;
-using nyingi.Kafa.Reflection;
-using System;
-using System.Xml;
 using static nyingi.Kafa.Reader.KafaReader;
 
 namespace nyingi.Kafa
@@ -17,7 +14,7 @@ namespace nyingi.Kafa
 
         public static IEnumerable<T> Read<T>(string content, KafaOptions? options = null)
         {
-            ArgumentNullException.ThrowIfNullOrEmpty(content, nameof(content));
+            ArgumentException.ThrowIfNullOrEmpty(content, nameof(content));
             var rows = Read(content.AsSpan(), options);
             var reflection = SetupOptions<T>(options);
             return reflection.SetProperties<T>(rows);

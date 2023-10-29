@@ -1,5 +1,4 @@
 ﻿using System.Buffers;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace nyingi.Kafa.Writer
@@ -26,7 +25,7 @@ namespace nyingi.Kafa.Writer
         {
             _stream = stream;
             _options = options;
-            _kafaPooledWriter = new KafaPooledWriter(0); // use the default 65k
+            _kafaPooledWriter = new KafaPooledWriter(); // use the default 65k
         }
 
         public void WriteSeparator()

@@ -1,11 +1,6 @@
 ﻿using System.Buffers;
 using nyingi.Kafa.Reader;
 using nyingi.Kafa.Reflection;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading;
-using System.Xml;
 using nyingi.Kafa.Writer;
 using static nyingi.Kafa.Reader.KafaReader;
 
@@ -77,48 +72,48 @@ namespace nyingi.Kafa
             return reader.GetRows();
         }
 
-        public static void Write<T>(IBufferWriter<byte> bufferWriter, List<T> entities, KafaOptions options = null)
+        public static void Write<T>(IBufferWriter<byte> bufferWriter, List<T> entities, KafaOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
             var reflection = SetupOptions<T>(options);
             using var writer = new KafaWriter(bufferWriter, reflection.TypeInfo.KafaOptions);
-            reflection.GetProperties<T>(writer, entities);
+            reflection.GetProperties(writer, entities);
         }
         
         
-        public static ReadOnlySpan<byte> Write<T>(List<T> entities, KafaOptions options = null)
+        public static ReadOnlySpan<byte> Write<T>(List<T> entities, KafaOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
             var reflection = SetupOptions<T>(options);
             using var pooledBufferWriter = new KafaPooledWriter();
             using var bufferWriter = new KafaWriter(pooledBufferWriter, reflection.TypeInfo.KafaOptions);
-            reflection.GetProperties<T>(bufferWriter, entities);
+            reflection.GetProperties(bufferWriter, entities);
             return pooledBufferWriter.WrittenAsSpan;
         }
 
-        public static async ValueTask<Stream> WriteToStreamAsync<T>(List<T> entities, KafaOptions options = null, CancellationToken token = default)
+        public static async ValueTask<Stream> WriteToStreamAsync<T>(List<T> entities, KafaOptions? options = null, CancellationToken token = default)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
             var reflection = SetupOptions<T>(options);
             var memoryStream = new MemoryStream();
             using var bufferWriter = new KafaWriter(memoryStream, reflection.TypeInfo.KafaOptions);
-            reflection.GetProperties<T>(bufferWriter, entities);
+            reflection.GetProperties(bufferWriter, entities);
             await bufferWriter.FlushAsync(token).ConfigureAwait(false);
             return memoryStream;
         }
 
-        public static async ValueTask WriteToFileAsync<T>(List<T> entities, string path, KafaOptions options = null, CancellationToken token=default)
+        public static async ValueTask WriteToFileAsync<T>(List<T> entities, string path, KafaOptions? options = null, CancellationToken token=default)
         {
             ArgumentNullException.ThrowIfNull(entities, nameof(entities));
             ArgumentNullException.ThrowIfNull(path, nameof(path));
             var reflection = SetupOptions<T>(options);
             using var fs = new FileStream(path, FileMode.Create);
             using var bufferWriter = new KafaWriter(fs, reflection.TypeInfo.KafaOptions);
-            reflection.GetProperties<T>(bufferWriter, entities);
+            reflection.GetProperties(bufferWriter, entities);
             await bufferWriter.FlushAsync(token).ConfigureAwait(false);
         }
 
-        private static KafaReflection SetupOptions<T>(KafaOptions options)
+        private static KafaReflection SetupOptions<T>(KafaOptions? options)
         {
             options = KafaOptions.ResolveKafaOptions(options);
             var typeInfo = new KafaTypeInfo(typeof(T), options);

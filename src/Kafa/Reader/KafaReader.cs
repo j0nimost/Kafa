@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,11 +7,9 @@ namespace nyingi.Kafa.Reader
     public partial class KafaReader : IDisposable
     {
         private readonly KafaReadState _kafaReadState;
-        private readonly CultureInfo? cultureInfo;
         public KafaReader(KafaReadState kafaReadState)
         {
             _kafaReadState = kafaReadState;
-            cultureInfo = kafaReadState.Options.CultureInfo;
         }
 
         public int ColumnCount => _kafaReadState.ColCount;
