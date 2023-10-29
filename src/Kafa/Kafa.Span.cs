@@ -19,8 +19,7 @@ namespace nyingi.Kafa
         {
             ArgumentNullException.ThrowIfNullOrEmpty(content, nameof(content));
             var rows = Read(content.AsSpan(), options);
-            var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo);
+            var reflection = SetupOptions<T>(options);
             return reflection.SetProperties<T>(rows);
         }
 

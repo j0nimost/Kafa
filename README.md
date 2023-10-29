@@ -30,7 +30,8 @@ Example:
        }
 ```
 
-This offers you the granular control over each element. In addition you can also use `Parse<T>()` and `TryParse<T>(out var val)` on Col
+This offers you the granular control over each element. The API offers a list of extension Methods for the `Col` struct which allows
+you to Parse to any given type; `ParseInt()`, `ParseLong()`, `ParseFloat()`, `ParseDateTime()` etc.
 
 Example:
 ```c#
@@ -42,7 +43,7 @@ Example:
        {
             foreach (var col in row.Cols)
             {
-                sum += col.Parse<int>();
+                sum += col.ParseInt();
             }
        }
 ```
@@ -108,27 +109,23 @@ Behind the curtains Kafa is using `KafaPooledWriter` a pooled IBufferWriter to w
             {
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512},
                 new CsvData{ Date = DateTime.Parse("10/10/2023 4:08:38 PM"), Open=12.45, Close=12.99, High=13.00, Low=12.1, Name="AMZN", Volume=1233435512}
-            };
-
+            };    
             // get a ReadOnlySpan<bytes>
             var spanOfbytes = await Kafa.Write<CsvData>(csvs);
-            string result = Encoding.UTF8.GetString(spanOfbytes);
+            string result = Encoding.UTF8.GetString(spanOfbytes);    
 
             // or 
-            // write to an Stream
-
-            using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);
+            // write to an Stream    
+            using var stream = await Kafa.WriteToStreamAsync<CsvData>(csvs);  
 
             // or 
-            // Write to a IBufferWriter<byte> for zero allocation writes
-
+            // Write to a IBufferWriter<byte> for zero allocation writes    
             var arrayWriter = new ArrayBufferWriter<byte>();
             Kafa.Write<CsvData>(arrayWriter, csvs);
-            var str = Encoding.UTF8.GetString(arrayWriter.WrittenSpan);
-
+            var str = Encoding.UTF8.GetString(arrayWriter.WrittenSpan);    
+            
             // or
-            // write directly to a file
-
+            // write directly to a file    
             await Kafa.WriteToFileAsync<CsvData>(csvs,@"C:\Users\ADMIN\Documents");
 
 ```

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
+using System.Globalization;
 using System.Reflection;
-using System.Reflection.PortableExecutable;
+using nyingi.Kafa.Reader;
 using static nyingi.Kafa.Reader.KafaReader;
 
 namespace nyingi.Kafa.Reflection
@@ -10,10 +11,12 @@ namespace nyingi.Kafa.Reflection
         private Dictionary<int, PropertyInfo> properties= default;
 
         public readonly KafaTypeInfo TypeInfo;
+        private readonly CultureInfo? _cultureInfo;
         public KafaReflection(KafaTypeInfo typeInfo) 
         {
             // match propertyName with header
             TypeInfo = typeInfo;
+            _cultureInfo = TypeInfo.KafaOptions.CultureInfo;
         }
 
         private void ReadHeader(OrderedDictionary headers = null)
@@ -88,47 +91,51 @@ namespace nyingi.Kafa.Reflection
 
             return instance;
         }
-
-
-
         private object? TypeResolver(Type type, Col col)
         {
-
             if (type == typeof(string))
             {
-                return col.Value.ToString();
+                return col.ToString();
             }
             else if (type == typeof(int))
             {
-                return col.Parse<int>();
+                return col.ParseInt(_cultureInfo);
             }
             else if(type == typeof(long))
             {
-                return col.Parse<long>();
+                return col.ParseLong(_cultureInfo);
             }
             else if(type == typeof(float))
             {
-                return col.Parse<float>();
+                return col.ParseFloat(_cultureInfo);
             }
             else if(type == typeof(double))
             {
-                return col.Parse<double>();
+                return col.ParseDouble(_cultureInfo);
             }
             else if(type == typeof(decimal))
             {
-                return col.Parse<decimal>();
+                return col.ParseDecimal(_cultureInfo);
+            }
+            else if(type == typeof(bool))
+            {
+                return col.ParseBool();
             }
             else if(type == typeof(DateTime))
             {
-                return col.Parse<DateTime>();
+                return col.ParseDateTime(_cultureInfo);
             }
             else if(type == typeof(DateTimeOffset))
             {
-                return col.Parse<DateTimeOffset>();
+                return col.ParseDateTimeOffSet(_cultureInfo);
+            }
+            else if (type == typeof(Guid))
+            {
+                return col.ParseGuid(_cultureInfo);
             }
             else
             {
-                return default;
+                return null;
             }
 
         }

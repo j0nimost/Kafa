@@ -7,8 +7,4 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
   </PropertyGroup>
-
-  <ItemGroup> 
-    <Folder Include="Reader\" />
-  </ItemGroup>
 </Project>

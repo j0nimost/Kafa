@@ -30,14 +30,7 @@ namespace nyingi.Kafa.Reader
                 int index = _colEnumerable.ReadColByHeader(columnName);
                 Value = _colEnumerable.ReadColAsSpan(index);
             }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public T Parse<T>() where T : ISpanParsable<T> => _colEnumerable.Parse<T>(Value);
-
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool TryParse<T>(out T? result) where T : ISpanParsable<T> => _colEnumerable.TryParse(Value, out result);
-
+            
             public override string ToString()
             {
                 return $"{Value}";
@@ -94,17 +87,6 @@ namespace nyingi.Kafa.Reader
                 var mem = _reader.ReadColAsMemory(startIndex, lastIndex);
                 return mem.Span;
             } 
-
-
-            public readonly T Parse<T>(ReadOnlySpan<char> scanSpan) where T : ISpanParsable<T>
-            {
-                return T.Parse(scanSpan, _reader.cultureInfo);
-            }
-
-            public readonly bool TryParse<T>(ReadOnlySpan<char> colValue, out T? result) where T : ISpanParsable<T>
-            {
-                return T.TryParse(colValue, _reader.cultureInfo, out result);
-            }
 
             public Enumerator GetEnumerator() => new Enumerator(this);
 

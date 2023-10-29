@@ -31,8 +31,7 @@ namespace nyingi.Kafa
         public static IEnumerable<T> Read<T>(Stream ioStream, KafaOptions? options = null)
         {
             var rowEnumerable = Read(ioStream, options);
-            var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo);
+            var reflection = SetupOptions<T>(options);
             return reflection.SetProperties<T>(rowEnumerable);
         }
 
@@ -64,8 +63,7 @@ namespace nyingi.Kafa
         public static async ValueTask<IEnumerable<T>> ReadAsync<T>(Stream ioStream, KafaOptions? options = null, CancellationToken cancellationToken = default)
         {
             var rows = await ReadAsync(ioStream, options, cancellationToken).ConfigureAwait(false);
-            var typeInfo = new KafaTypeInfo(typeof(T), options);
-            var reflection = new KafaReflection(typeInfo);
+            var reflection = SetupOptions<T>(options);
             return reflection.SetProperties<T>(rows);
         }
 
