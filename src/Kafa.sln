@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafa", "Kafa\Kafa.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafaTests", "KafaTests\KafaTests.csproj", "{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kafa.Generators", "Kafa.Generators\Kafa.Generators.csproj", "{65208E1E-7289-451E-8C66-578B98F4CC90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65208E1E-7289-451E-8C66-578B98F4CC90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65208E1E-7289-451E-8C66-578B98F4CC90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65208E1E-7289-451E-8C66-578B98F4CC90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65208E1E-7289-451E-8C66-578B98F4CC90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+<!--    <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>-->
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kafa.Generators\Kafa.Generators.csproj" OutputItemType="Analyzer"
+            ReferenceOutputAssembly="false"/>
+  </ItemGroup>
 </Project>

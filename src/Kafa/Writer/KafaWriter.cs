@@ -12,7 +12,7 @@ namespace nyingi.Kafa.Writer
         private readonly byte[] _winNewLine = new byte[2] {(byte)'\r',(byte)'\n'};
 
         private readonly KafaOptions _options;
-        
+        private readonly byte[] _cachedNewLine;
         
         private byte[] _separator = new byte[1];
         public KafaWriter(in IBufferWriter<byte> bufferWriter, KafaOptions options)
@@ -20,12 +20,14 @@ namespace nyingi.Kafa.Writer
             _bufferWriter = bufferWriter ?? throw new NullReferenceException(nameof(bufferWriter));
             _options = options;
             _separator[0] = (byte)_options.Separator;
+            _cachedNewLine = Environment.OSVersion.Platform == PlatformID.Unix ? _unixNewLine : _winNewLine;
         }
         public KafaWriter(in Stream stream, KafaOptions options)
         {
             _stream = stream;
             _options = options;
             _kafaPooledWriter = new KafaPooledWriter(); // use the default 65k
+            _cachedNewLine = Environment.OSVersion.Platform == PlatformID.Unix ? _unixNewLine : _winNewLine;
         }
 
         public void WriteSeparator()
@@ -35,8 +37,7 @@ namespace nyingi.Kafa.Writer
 
         public void WriteLine()
         {
-            var newLine = Environment.OSVersion.Platform == PlatformID.Unix ? _unixNewLine : _winNewLine;
-            Write(newLine);
+            Write(_cachedNewLine);
         }
 
         public void Write(string str)
