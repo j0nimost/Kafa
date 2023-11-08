@@ -2,7 +2,7 @@
 
 internal sealed partial class KafaSourceGenerator
 {
-    private static readonly string GeneratedAttribute = $@"[global::System.CodeDom.Compiler.GeneratedCodeAttribute(""{typeof(KafaSourceGenerator).Assembly.GetName().Name}"", ""0.1.0"")]";
+    private static readonly string GeneratedAttribute = $@"[global::System.CodeDom.Compiler.GeneratedCodeAttribute(""{typeof(KafaSourceGenerator).Assembly.GetName().Name}"", ""{typeof(KafaSourceGenerator).Assembly.GetName().Version}"")]";
     
     //lang=c#
     private static readonly string KafaSerializableAttribute = $@"
