@@ -9,7 +9,6 @@
             Type = type;
             KafaOptions = kafaOptions;
         }
-
         public object? ReturnValue;
     }
 }

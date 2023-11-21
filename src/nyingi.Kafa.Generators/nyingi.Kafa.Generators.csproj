@@ -20,5 +20,4 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
   </ItemGroup>
-
 </Project>

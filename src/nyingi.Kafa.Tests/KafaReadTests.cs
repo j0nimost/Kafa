@@ -1,7 +1,8 @@
 ﻿using nyingi.Kafa.Reader;
 using System.IO;
-
-namespace KafaTests
+using nyingi.Kafa;
+    
+namespace nyingi.Kafa.Tests
 {
     public class KafaReadTests
     {

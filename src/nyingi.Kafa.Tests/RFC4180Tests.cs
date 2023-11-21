@@ -1,4 +1,4 @@
-﻿namespace KafaTests
+﻿namespace nyingi.Kafa.Tests
 {
     /// <summary>
     /// CSV Standard https://www.rfc-editor.org/rfc/rfc4180

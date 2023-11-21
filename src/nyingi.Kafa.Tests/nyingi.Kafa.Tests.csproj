@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kafa\Kafa.csproj" />
+<!--    <ProjectReference Include="..\nyingi.Kafa.Generators\nyingi.Kafa.Generators.csproj" />-->
+    <ProjectReference Include="..\nyingi.Kafa.Generators\nyingi.Kafa.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    <ProjectReference Include="..\nyingi.Kafa\nyingi.Kafa.csproj" />
   </ItemGroup>
 
 </Project>

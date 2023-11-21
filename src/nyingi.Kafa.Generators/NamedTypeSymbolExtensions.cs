@@ -3,10 +3,9 @@ using Microsoft.CodeAnalysis;
 
 namespace nyingi.Kafa.Generators;
 
-internal static class NameTypeSymbolExtensions
+public static class NamedTypeSymbolExtensions
 {
-    
-    public static IEnumerable<INamedTypeSymbol> GetTypeAndSubtypes(this INamedTypeSymbol? type)
+    public static IEnumerable<INamedTypeSymbol> GetThisAndSubtypes(this INamedTypeSymbol? type)
     {
         INamedTypeSymbol? current = type;
         while (current is not null)
@@ -15,5 +14,4 @@ internal static class NameTypeSymbolExtensions
             current = current.BaseType;
         }
     }
-    
 }

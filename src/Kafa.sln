@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafa", "Kafa\Kafa.csproj", "{66DC4279-98F6-47B9-B591-45A0121B3E9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nyingi.Kafa", "nyingi.Kafa\nyingi.Kafa.csproj", "{66DC4279-98F6-47B9-B591-45A0121B3E9E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafaTests", "KafaTests\KafaTests.csproj", "{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nyingi.Kafa.Tests", "nyingi.Kafa.Tests\nyingi.Kafa.Tests.csproj", "{BB863E7D-755B-4626-90C3-6AAA1A8B4FAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kafa.Generators", "Kafa.Generators\Kafa.Generators.csproj", "{65208E1E-7289-451E-8C66-578B98F4CC90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nyingi.Kafa.Generators", "nyingi.Kafa.Generators\nyingi.Kafa.Generators.csproj", "{65208E1E-7289-451E-8C66-578B98F4CC90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

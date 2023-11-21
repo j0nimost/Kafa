@@ -1,4 +1,6 @@
-﻿namespace KafaTests
+﻿using nyingi.Kafa;
+
+namespace nyingi.Kafa.Tests
 {
     public class CsvData
     {

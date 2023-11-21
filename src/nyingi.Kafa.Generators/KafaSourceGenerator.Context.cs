@@ -10,15 +10,11 @@ namespace nyingi.Kafa.Generators
         
         private static readonly SymbolDisplayFormat Format = SymbolDisplayFormat.FullyQualifiedFormat.WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.UseSpecialTypes | SymbolDisplayMiscellaneousOptions.ExpandNullable | SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier);
 
-        private record struct KafaEnumContext(ClassDeclarationSyntax ClassDeclarationSyntax,
-            INamedTypeSymbol NamedTypeSymbol, SemanticModel SemanticModel, SyntaxList<AttributeListSyntax> AttributeList);
-
         private record struct TypeDefinition(string Name, ImmutableArray<PropertyContext> Properties);
 
-        private record struct TypeDefinitionContext(bool IsGlobalNameSpace, string NameSpace, string Name,
+        private record struct TypeDefinitionContext(string NameSpace, string Name,
             ImmutableArray<TypeDefinition> TypeDefinitions)
         {
-            public string GetFullName() => IsGlobalNameSpace ? Name : $"{NameSpace}.{Name}";
         }
     }
 }

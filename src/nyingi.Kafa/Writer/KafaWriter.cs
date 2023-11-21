@@ -46,7 +46,7 @@ namespace nyingi.Kafa.Writer
             Write(strBytes.AsSpan());
         }
 
-        public void Write(ReadOnlySpan<byte> values)
+        private void Write(ReadOnlySpan<byte> values)
         {
             if (_bufferWriter != null)
             {
@@ -54,7 +54,7 @@ namespace nyingi.Kafa.Writer
             }
             else
             {
-                _kafaPooledWriter.Write(values);
+                _kafaPooledWriter!.Write(values);
             }
         }
 
@@ -62,7 +62,7 @@ namespace nyingi.Kafa.Writer
         {
             if (_stream != null)
             {
-                _stream.Write(_kafaPooledWriter.WrittenAsSpan);
+                _stream.Write(_kafaPooledWriter!.WrittenAsSpan);
                 _stream.Flush();
             }
         }

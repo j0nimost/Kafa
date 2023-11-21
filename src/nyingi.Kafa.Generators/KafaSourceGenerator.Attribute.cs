@@ -10,11 +10,11 @@ internal sealed partial class KafaSourceGenerator
 
 #nullable enable
 
-namespace nyingi.Kafa.Generators;
+namespace nyingi.Kafa;
 
 {GeneratedAttribute}
 [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple =true, Inherited = false)]
-internal sealed class KafaSerializableAttribute : global::System.Attribute
+public sealed class KafaSerializableAttribute : global::System.Attribute
 {{
     public global::System.Type Type {{ get; }}
 

@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
-using nyingi.Kafa.Writer;
+using nyingi.Kafa;
 
-namespace KafaTests
+namespace nyingi.Kafa.Tests
 {
     public class KafaWriteTests
     {
